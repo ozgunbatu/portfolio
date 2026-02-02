@@ -35,3 +35,8 @@ commit:
 git add README.md
 git commit -m "Trigger GitHub Pages redeploy"
 git push origin main
+
+mv replit.md README.md
+git add README.md
+git commit -m "Rename replid.md to README.md for GitHub portfolio"
+git push origin main
