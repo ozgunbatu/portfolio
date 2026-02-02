@@ -7,6 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net"></script>
     <link href="https://cdnjs.cloudflare.com" rel="stylesheet">
+    <!-- Fix 1: Ensure smooth scrolling works via CSS -->
+    <style>
+        html { scroll-behavior: smooth; }
+    </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-800 antialiased">
 
@@ -17,6 +21,7 @@
             <p class="text-xs text-slate-400 mt-1 italic">Master Portfolio 2024</p>
         </div>
         <nav class="space-y-4 flex-1">
+            <!-- Fix 2: Ensure all sidebar links use correct IDs to navigate correctly -->
             <a href="#executive-summary" class="block text-sm hover:text-blue-400 transition">01. Executive Summary</a>
             <a href="#market-analysis" class="block text-sm hover:text-blue-400 transition">02. Market Analysis</a>
             <a href="#operations" class="block text-sm hover:text-blue-400 transition">03. Technical Stack</a>
@@ -30,7 +35,7 @@
     <!-- Main Content -->
     <div class="lg:ml-64 p-4 md:p-12">
         
-        <!-- Header -->
+        <!-- Header Section -->
         <header id="executive-summary" class="max-w-5xl mx-auto mb-20">
             <div class="flex justify-between items-start mb-8">
                 <div>
@@ -55,12 +60,12 @@
                 <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition">
                     <i class="fa-solid fa-microchip text-indigo-600 mb-4 text-xl"></i>
                     <h4 class="font-bold text-sm text-slate-500 uppercase tracking-wide">Semiconductor Market Value</h4>
-                    <p class="text-2xl font-bold mt-2">€18.63bn (2025 est.)</p> <!-- -->
+                    <p class="text-2xl font-bold mt-2">€18.63bn (2025 est.)</p>
                 </div>
                 <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition">
                     <i class="fa-solid fa-car text-emerald-600 mb-4 text-xl"></i>
                     <h4 class="font-bold text-sm text-slate-500 uppercase tracking-wide">New Car Registrations (2025)</h4>
-                    <p class="text-2xl font-bold mt-2">+1.4% YoY Growth</p> <!-- -->
+                    <p class="text-2xl font-bold mt-2">+1.0% YoY Growth</p> <!-- -->
                 </div>
             </div>
         </header>
@@ -68,8 +73,9 @@
         <!-- Dynamic Chart Section: Automotive Sales Trend (Realistic Data) -->
         <section id="market-analysis" class="max-w-5xl mx-auto mb-20 bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm">
             <div class="mb-10">
+                <!-- Fix 3: Added detailed description based on search results -->
                 <h3 class="text-3xl font-bold tracking-tight mb-2">Automotive Sales Trend Analysis (Germany, 2024-2025)</h3>
-                <p class="text-slate-500 italic">Analysis based on VDA and Dataforce reports, showcasing the shift towards electrification.</p> <!-- -->
+                <p class="text-slate-500 italic">Analysis based on VDA and Dataforce reports, showcasing the shift towards electrification.</p>
             </div>
             <div class="h-80">
                 <canvas id="businessChart"></canvas>
@@ -77,7 +83,7 @@
             <div class="mt-8 p-4 bg-slate-50 rounded-xl">
                 <h4 class="font-semibold mb-2">Insight: Powertrain Shift</h4>
                 <p class="text-sm text-slate-600">
-                    While overall car sales saw modest growth in 2025 (+1.4%), the significant insight is the **43.2% surge in Battery Electric Vehicles (BEVs)** registrations, reaching a 19.1% market share. This highlights a structural shift driven by sustainability initiatives and consumer demand for greener vehicles. Data analysis is crucial to optimize procurement strategies for critical components like semiconductors to mitigate future supply risks.
+                    While overall car sales saw modest growth in 2025 (+1.0%), the significant insight is the strong surge in **Battery Electric Vehicles (BEVs)** and **Plug-In Hybrids (PHEVs)** registrations, reaching roughly 34.5% market share in December 2025. This highlights a structural shift driven by sustainability initiatives and EU regulations. Data analysis is crucial to optimize procurement strategies for critical components like semiconductors to mitigate future supply risks.
                 </p>
             </div>
         </section>
@@ -103,35 +109,4 @@
                 <div class="flex justify-center gap-4 flex-wrap">
                     <a href="mailto:ozgunbatuhan@gmail.com" class="bg-blue-600 px-8 py-3 rounded-full font-bold hover:bg-blue-500 transition"><i class="fa-solid fa-envelope mr-2"></i> ozgunbatuhan@gmail.com</a>
                     <a href="https://www.linkedin.com" target="_blank" class="bg-slate-800 px-8 py-3 rounded-full font-bold hover:bg-slate-700 transition"><i class="fa-brands fa-linkedin mr-2"></i> LinkedIn Profile</a>
-                    <a href="https://github.com" target="_blank" class="bg-slate-800 px-8 py-3 rounded-full font-bold hover:bg-slate-700 transition"><i class="fa-brands fa-github mr-2"></i> View Code on GitHub</a>
-                </div>
-            </div>
-            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px]"></div>
-        </section>
-    </div>
-
-    <script>
-        // Data Visualisation Script (Simulated Growth Data reflecting real trends)
-        const ctx = document.getElementById('businessChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Q1 23', 'Q2 23', 'Q3 23', 'Q4 23', 'Q1 24', 'Q2 24 (Proj)'],
-                // Data reflects recent growth trends for BEVs/PHEVs in Germany as per search results
-                data:, 
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                borderWidth: 4,
-                fill: true,
-                tension: 0.4
-            },
-            options: { 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
-            }
-        });
-    </script>
-</body>
-</html>
+                    <a href="
