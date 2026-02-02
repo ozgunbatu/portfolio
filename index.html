@@ -3,94 +3,135 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Batuhan Dogan | Analytics · Strategy · Growth</title>
+
+<title>Batuhan Dogan | Analytics · Product · UX · Growth</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="bg-slate-50 text-slate-900">
 
+<!-- NAV -->
 <nav class="fixed w-full bg-white/90 backdrop-blur border-b z-50">
-<div class="max-w-7xl mx-auto flex justify-between p-4">
+<div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+
 <span class="font-black text-xl">Batuhan Dogan</span>
-<div class="flex gap-4 text-sm font-semibold">
+
+<div class="flex gap-4 items-center text-sm font-semibold">
 <a href="#cases">Cases</a>
 <a href="#contact">Contact</a>
+
+<button id="langBtn"
+class="border px-3 py-1 rounded-full hover:bg-slate-100">
+🇩🇪
+</button>
+
 </div>
 </div>
 </nav>
 
-<header class="pt-36 max-w-7xl mx-auto px-6 mb-32">
+<!-- HERO -->
+<header class="pt-40 max-w-7xl mx-auto px-6 mb-40">
 
-<h1 class="text-6xl font-black mb-6">
-SQL-Driven Analytics, Strategy & Growth
+<h1 id="heroTitle" class="text-6xl font-black mb-6 leading-tight">
+SQL-Driven Analytics, Product Thinking & UX Strategy
 </h1>
 
-<p class="text-xl text-slate-600 max-w-3xl">
-MSc Business student in Germany targeting Werkstudent & Junior roles across
-Data, Operations, Product, Project & Digital Marketing.
+<p id="heroSub"
+class="text-xl text-slate-600 max-w-3xl">
+MSc Business student in Germany targeting Werkstudent & Junior roles in
+Data, Operations, Product, UX and Digital Marketing.
 </p>
+
+<div class="mt-10 flex gap-4">
+
+<a href="assets/Batuhan_Dogan_CV.pdf"
+class="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold">
+Download CV
+</a>
+
+<a href="#cases"
+class="border px-8 py-4 rounded-full font-bold">
+View Case Studies
+</a>
+
+</div>
 
 </header>
 
-<section id="cases" class="max-w-7xl mx-auto px-6 mb-32">
+<!-- CASES -->
+<section id="cases" class="max-w-7xl mx-auto px-6 mb-40">
 
-<h2 class="text-4xl font-bold mb-10">Selected Case Studies</h2>
+<h2 class="text-4xl font-bold mb-12">
+Selected Case Studies
+</h2>
 
 <div class="grid md:grid-cols-3 gap-8">
 
-<a href="cases/ev-demand.html"
-class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
-
-<h3 class="font-bold text-xl mb-2">EV Demand Forecast</h3>
-<p class="text-sm text-slate-500">Inventory −7%</p>
-
+<a href="cases/ev-demand.html" class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
+<h3 class="font-bold text-xl">EV Demand Forecast</h3>
+<p class="text-sm text-slate-500">SQL · Ops · Inventory −7%</p>
 </a>
 
-<a href="cases/checkout-ux.html"
-class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
-
-<h3 class="font-bold text-xl mb-2">Checkout UX Optimisation</h3>
-<p class="text-sm text-slate-500">Conversion +18%</p>
-
+<a href="cases/checkout-ux.html" class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
+<h3 class="font-bold text-xl">Mobile App UX Research</h3>
+<p class="text-sm text-slate-500">UX · Funnels · +18%</p>
 </a>
 
-<a href="cases/seo-growth.html"
-class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
+<a href="cases/ui-redesign.html" class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
+<h3 class="font-bold text-xl">UI Design System</h3>
+<p class="text-sm text-slate-500">Figma · Web App</p>
+</a>
 
-<h3 class="font-bold text-xl mb-2">SEO Growth Engine</h3>
-<p class="text-sm text-slate-500">Traffic +40%</p>
+<a href="cases/seo-growth.html" class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
+<h3 class="font-bold text-xl">SEO Growth Engine</h3>
+<p class="text-sm text-slate-500">Marketing · Traffic +40%</p>
+</a>
 
+<a href="cases/product-launch.html" class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
+<h3 class="font-bold text-xl">Product Market Entry</h3>
+<p class="text-sm text-slate-500">Strategy · Pricing</p>
 </a>
 
 </div>
 
 </section>
 
+<!-- CONTACT -->
 <section id="contact"
-class="bg-slate-900 text-white rounded-[3rem] p-16 text-center max-w-7xl mx-auto mb-32">
+class="bg-slate-900 text-white rounded-[3rem] p-20 text-center max-w-7xl mx-auto mb-40">
 
 <h2 class="text-4xl font-bold mb-6">
 Open to Werkstudent & Junior Roles
 </h2>
 
 <p class="text-slate-400 mb-8">
-Business · Market · Ops · Product · Project · Digital
+Data · Business · Product · UX · Marketing · Operations
 </p>
 
 <a href="assets/Batuhan_Dogan_CV.pdf"
-class="bg-emerald-600 px-8 py-4 rounded-full font-bold">
+class="bg-emerald-600 px-10 py-4 rounded-full font-bold">
 Download CV
 </a>
 
 </section>
 
+<script>
+let de=false;
+
+langBtn.onclick=()=>{
+de=!de;
+
+heroTitle.textContent = de
+? "SQL-basierte Analysen, Produktdenken & UX-Strategie"
+: "SQL-Driven Analytics, Product Thinking & UX Strategy";
+
+heroSub.textContent = de
+? "MSc Business Student in Deutschland mit Fokus auf Werkstudent- und Junior-Rollen in Data, Operations, Product, UX und Digital Marketing."
+: "MSc Business student in Germany targeting Werkstudent & Junior roles in Data, Operations, Product, UX and Digital Marketing.";
+};
+</script>
+
 </body>
 </html>
-/index.html
-/cases/
-   ev-demand.html
-   checkout-ux.html
-   seo-growth.html
-/assets/
-   Batuhan_Dogan_CV.pdf
