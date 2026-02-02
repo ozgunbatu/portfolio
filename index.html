@@ -3,285 +3,87 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Batuhan Dogan | Analytics · Strategy · Growth</title>
 
-<title>Özgün Doğan | SQL Analytics · Strategy · Growth</title>
-
-<meta name="description"
-content="Portfolio of Özgun Doğan – SQL-driven Business Analyst & MSc student in Germany focusing on Analytics, Operations, Product and Digital Marketing." />
-
-<meta name="keywords"
-content="Business Analyst Germany, SQL Analyst, Werkstudent Data, Portfolio, Market Analyst, Operations, Digital Marketing" />
-
-<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<script>
-tailwind.config = { darkMode:"class" }
-</script>
 </head>
 
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+<body class="bg-slate-50 text-slate-900">
 
-<!-- NAV -->
-<nav class="fixed w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b z-50">
+<nav class="fixed w-full bg-white/90 backdrop-blur border-b z-50">
 <div class="max-w-7xl mx-auto flex justify-between p-4">
-
-<span class="font-black text-xl">Özgün Doğan</span>
-
-<div class="flex gap-4 items-center text-sm font-semibold">
-
+<span class="font-black text-xl">Batuhan Dogan</span>
+<div class="flex gap-4 text-sm font-semibold">
 <a href="#cases">Cases</a>
-<a href="#blog">Blog</a>
-<a href="#dashboard">Dashboard</a>
 <a href="#contact">Contact</a>
-
-<button id="langToggle" class="border px-3 py-1 rounded-full">DE</button>
-<button id="themeToggle" class="border px-3 py-1 rounded-full">🌙</button>
-
 </div>
 </div>
 </nav>
 
-<!-- HERO -->
-<section class="pt-36 max-w-7xl mx-auto px-6 mb-32">
+<header class="pt-36 max-w-7xl mx-auto px-6 mb-32">
 
-<h1 id="heroTitle" class="text-6xl font-black mb-6">
-SQL-Driven Analytics, Strategy & Growth.
+<h1 class="text-6xl font-black mb-6">
+SQL-Driven Analytics, Strategy & Growth
 </h1>
 
-<p id="heroSub" class="text-xl text-slate-600 dark:text-slate-400 max-w-3xl">
-MSc Business Management student targeting Werkstudent & Junior roles across
-Data, Operations, Product and Digital Marketing in Germany.
+<p class="text-xl text-slate-600 max-w-3xl">
+MSc Business student in Germany targeting Werkstudent & Junior roles across
+Data, Operations, Product, Project & Digital Marketing.
 </p>
 
-<div class="grid md:grid-cols-4 gap-6 mt-12">
+</header>
 
-<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow">
-<p class="text-xs text-slate-500">Cases</p>
-<p class="text-2xl font-bold">10+</p>
-</div>
-
-<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow">
-<p class="text-xs text-slate-500">SQL Queries</p>
-<p class="text-2xl font-bold">150+</p>
-</div>
-
-<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow">
-<p class="text-xs text-slate-500">Dashboards</p>
-<p class="text-2xl font-bold">20+</p>
-</div>
-
-<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow">
-<p class="text-xs text-slate-500">Focus</p>
-<p class="text-sm font-bold">Automotive · Retail · Energy</p>
-</div>
-
-</div>
-</section>
-
-<!-- CASES -->
 <section id="cases" class="max-w-7xl mx-auto px-6 mb-32">
 
-<h2 class="text-4xl font-bold mb-10">Case Studies</h2>
-
-<div id="caseGrid" class="grid md:grid-cols-3 gap-8">
-
-<div class="case-card bg-white dark:bg-slate-900 p-8 rounded-3xl shadow cursor-pointer"
-data-title="EV Demand Forecast"
-data-desc="Built SQL models forecasting EV demand across German regions. Reduced excess inventory by 7%. Used CTEs, window functions and PowerBI dashboards.">
-
-<h3 class="font-bold text-xl">EV Demand Forecast</h3>
-<p class="text-sm text-slate-500">Inventory −7%</p>
-
-</div>
-
-<div class="case-card bg-white dark:bg-slate-900 p-8 rounded-3xl shadow cursor-pointer"
-data-title="Checkout UX Redesign"
-data-desc="Led usability tests, redesigned checkout funnel and validated with A/B experiments resulting in +18% conversion uplift.">
-
-<h3 class="font-bold text-xl">Checkout UX Redesign</h3>
-<p class="text-sm text-slate-500">Conversion +18%</p>
-
-</div>
-
-<div class="case-card bg-white dark:bg-slate-900 p-8 rounded-3xl shadow cursor-pointer"
-data-title="SEO Growth Model"
-data-desc="Created keyword clustering model and content prioritisation framework increasing organic traffic by 40% in 3 months.">
-
-<h3 class="font-bold text-xl">SEO Growth Model</h3>
-<p class="text-sm text-slate-500">Traffic +40%</p>
-
-</div>
-
-</div>
-</section>
-
-<!-- BLOG -->
-<section id="blog" class="max-w-7xl mx-auto px-6 mb-32">
-
-<h2 class="text-4xl font-bold mb-10">Articles & Insights</h2>
+<h2 class="text-4xl font-bold mb-10">Selected Case Studies</h2>
 
 <div class="grid md:grid-cols-3 gap-8">
 
-<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow">
-<h3 class="font-bold mb-2">How SQL Drives Supply Chains</h3>
-<p class="text-sm text-slate-500">
-Using CTEs & window functions to detect bottlenecks.
-</p>
-</div>
+<a href="cases/ev-demand.html"
+class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
 
-<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow">
-<h3 class="font-bold mb-2">EV Market in Germany</h3>
-<p class="text-sm text-slate-500">
-Policy, demand curves and infrastructure analysis.
-</p>
-</div>
+<h3 class="font-bold text-xl mb-2">EV Demand Forecast</h3>
+<p class="text-sm text-slate-500">Inventory −7%</p>
 
-<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow">
-<h3 class="font-bold mb-2">Marketing Funnel Metrics</h3>
-<p class="text-sm text-slate-500">
-From CAC to LTV in growth teams.
-</p>
-</div>
+</a>
 
-</div>
-</section>
+<a href="cases/checkout-ux.html"
+class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
 
-<!-- DASHBOARD -->
-<section id="dashboard"
-class="max-w-7xl mx-auto px-6 mb-32 bg-white dark:bg-slate-900 p-14 rounded-[3rem]">
+<h3 class="font-bold text-xl mb-2">Checkout UX Optimisation</h3>
+<p class="text-sm text-slate-500">Conversion +18%</p>
 
-<h2 class="text-4xl font-bold mb-8">
-EV Adoption Dashboard – Germany
-</h2>
+</a>
 
-<div class="h-96">
-<canvas id="businessChart"></canvas>
-</div>
+<a href="cases/seo-growth.html"
+class="bg-white p-8 rounded-3xl shadow hover:scale-[1.03] transition">
 
-</section>
+<h3 class="font-bold text-xl mb-2">SEO Growth Engine</h3>
+<p class="text-sm text-slate-500">Traffic +40%</p>
 
-<!-- CONTACT -->
-<section id="contact"
-class="bg-slate-900 dark:bg-black text-white rounded-[3rem] p-16 text-center max-w-7xl mx-auto mb-32">
-
-<h2 class="text-4xl font-bold mb-6">
-Open to Werkstudent & Junior Roles
-</h2>
-
-<p class="text-slate-400 mb-10">
-Business · Market · Ops · Digital · Product · Project
-</p>
-
-<form class="max-w-xl mx-auto grid gap-4">
-
-<input placeholder="Your name"
-class="p-3 rounded-xl text-black"/>
-
-<input placeholder="Email"
-class="p-3 rounded-xl text-black"/>
-
-<textarea placeholder="Message"
-class="p-3 rounded-xl text-black h-32"></textarea>
-
-<button class="bg-blue-600 py-3 rounded-full font-bold">
-Send Message
-</button>
-
-</form>
-
-<div class="mt-8 flex justify-center gap-4">
-
-<a href="/assets/Ozgun_Dogan_CV.pdf"
-class="bg-emerald-600 px-6 py-3 rounded-full font-bold">
-Download CV
 </a>
 
 </div>
 
 </section>
 
-<!-- MODAL -->
-<div id="caseModal"
-class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+<section id="contact"
+class="bg-slate-900 text-white rounded-[3rem] p-16 text-center max-w-7xl mx-auto mb-32">
 
-<div class="bg-white dark:bg-slate-900 max-w-xl p-10 rounded-3xl">
+<h2 class="text-4xl font-bold mb-6">
+Open to Werkstudent & Junior Roles
+</h2>
 
-<h3 id="modalTitle" class="text-2xl font-bold mb-4"></h3>
-<p id="modalDesc" class="text-slate-600 dark:text-slate-400 mb-6"></p>
+<p class="text-slate-400 mb-8">
+Business · Market · Ops · Product · Project · Digital
+</p>
 
-<button id="closeModal"
-class="bg-blue-600 text-white px-6 py-2 rounded-full">
-Close
-</button>
+<a href="assets/Batuhan_Dogan_CV.pdf"
+class="bg-emerald-600 px-8 py-4 rounded-full font-bold">
+Download CV
+</a>
 
-</div>
-</div>
-
-<!-- JS -->
-<script>
-
-/* THEME */
-themeToggle.onclick = () =>
-document.documentElement.classList.toggle("dark");
-
-/* LANGUAGE */
-let lang="en";
-const dict={
-en:{
-heroTitle:"SQL-Driven Analytics, Strategy & Growth.",
-heroSub:"MSc Business Management student targeting Werkstudent & Junior roles across Data, Operations, Product and Digital Marketing in Germany."
-},
-de:{
-heroTitle:"SQL-getriebene Analytics, Strategie & Growth.",
-heroSub:"MSc Business-Management-Student auf der Suche nach Werkstudent- und Junior-Positionen in Data, Operations, Product und Digital Marketing in Deutschland."
-}
-};
-
-langToggle.onclick=()=>{
-lang=lang==="en"?"de":"en";
-heroTitle.textContent=dict[lang].heroTitle;
-heroSub.textContent=dict[lang].heroSub;
-};
-
-/* MODAL */
-const modal=document.getElementById("caseModal");
-
-document.querySelectorAll(".case-card").forEach(card=>{
-card.onclick=()=>{
-modal.classList.remove("hidden");
-modal.classList.add("flex");
-modalTitle.textContent=card.dataset.title;
-modalDesc.textContent=card.dataset.desc;
-};
-});
-
-closeModal.onclick=()=>{
-modal.classList.add("hidden");
-modal.classList.remove("flex");
-};
-
-/* CHART */
-new Chart(businessChart,{
-type:"line",
-data:{
-labels:["Q1 23","Q2 23","Q3 23","Q4 23","Q1 24","Q2 24"],
-datasets:[{
-label:"EV Share %",
-data:[15,18.5,22,28,31,34.5],
-borderColor:"#2563eb",
-backgroundColor:"rgba(37,99,235,0.15)",
-fill:true,
-tension:.4
-}]
-}
-});
-
-</script>
+</section>
 
 </body>
 </html>
