@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINN Case Study | Car Subscription Unit Economics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', 'Arial', sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%); color: white; padding: 70px 40px; text-align: center; margin-bottom: 45px; border-radius: 12px; box-shadow: 0 15px 50px rgba(245, 158, 11, 0.3); position: relative; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #f59e0b, #ffffff, #f59e0b); }
+        h1 { font-size: 3em; margin-bottom: 18px; font-weight: 300; }
+        .subtitle { font-size: 1.25em; opacity: 0.95; font-weight: 300; }
+        .author-info { margin-top: 22px; font-size: 0.95em; opacity: 0.85; }
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center; }
+        .tab-button { padding: 14px 28px; background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.4); border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 500; transition: all 0.3s; color: #f59e0b; }
+        .tab-button:hover { border-color: #f59e0b; background: rgba(245, 158, 11, 0.25); transform: translateY(-2px); }
+        .tab-button.active { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%); padding: 38px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 6px 25px rgba(0,0,0,0.3); border: 1px solid rgba(245, 158, 11, 0.2); transition: all 0.3s; }
+        .card:hover { transform: translateY(-6px); }
+        h2 { color: #f59e0b; margin-bottom: 22px; font-size: 2em; font-weight: 400; padding-bottom: 12px; border-bottom: 3px solid rgba(245, 158, 11, 0.3); }
+        h3 { color: #fbbf24; margin: 28px 0 18px 0; font-size: 1.4em; font-weight: 500; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 32px 0; }
+        .metric-card { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%); padding: 28px; border-radius: 10px; border-left: 4px solid #f59e0b; transition: all 0.3s; }
+        .metric-card:hover { transform: scale(1.03); }
+        .metric-label { font-size: 0.9em; color: #a8b5c0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .metric-value { font-size: 2.3em; font-weight: 300; color: #f59e0b; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 28px 0; border-radius: 10px; overflow: hidden; }
+        th { background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%); padding: 18px; text-align: left; font-weight: 500; color: #f59e0b; }
+        td { padding: 16px 18px; background: rgba(26, 31, 46, 0.4); border-bottom: 1px solid rgba(245, 158, 11, 0.1); }
+        tr:hover td { background: rgba(245, 158, 11, 0.08); }
+        .insight-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%); padding: 28px; border-radius: 10px; border-left: 5px solid #f59e0b; margin: 28px 0; line-height: 1.8; }
+        .insight-box.success { border-left-color: #10b981; }
+        .insight-box.warning { border-left-color: #ef4444; }
+        .chart-container { background: rgba(26, 31, 46, 0.6); padding: 30px; border-radius: 12px; margin: 28px 0; min-height: 350px; }
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+        .back-button { display: inline-block; padding: 12px 28px; background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.4); border-radius: 8px; color: #f59e0b; text-decoration: none; font-weight: 500; margin-top: 35px; transition: all 0.3s; }
+        .back-button:hover { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+        @media (max-width: 768px) { h1 { font-size: 2.2em; } .metric-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FINN</h1>
+            <p class="subtitle">Car Subscription Unit Economics & Growth Strategy</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Strategy</button>
+            <button class="tab-button" onclick="showTab('insights')">Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Munich-based FINN scaled auto subscription marketplace from €0 to €100M ARR through fleet management optimization, customer LTV modeling, and capital efficiency in asset-heavy business—targeting €500M ARR by 2026.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">ARR</div>
+                        <div class="metric-value">€100M+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">2023 Estimate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Fleet Size</div>
+                        <div class="metric-value">15K+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Vehicles Under Management</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Subscription</div>
+                        <div class="metric-value">€550/mo</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">12-24 Month Contracts</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Customer LTV</div>
+                        <div class="metric-value">€9,900</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">18-Month Avg Duration</div>
+                    </div>
+                </div>
+                <div class="insight-box success">
+                    <strong>Business Model:</strong> All-inclusive car subscription (insurance, maintenance, registration). Customer pays €400-800/month vs buying (€30K upfront + €300/mo costs). FINN owns/leases fleet, optimizes utilization (85%+ target), manages depreciation risk.
+                </div>
+            </div>
+        </div>
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can FINN achieve profitability in capital-intensive auto subscription model while competing with traditional leasing (lower cost) and ride-hailing (no ownership hassle)—all while managing depreciation risk in volatile used car market?</p>
+                <h3>Asset-Heavy Model Challenges</h3>
+                <ul>
+                    <li><strong>Capital intensity:</strong> €25K avg vehicle cost × 15K fleet = €375M invested. Requires debt/equity financing</li>
+                    <li><strong>Depreciation risk:</strong> Cars lose 20-30% value annually. Used car market volatility (COVID spike, then crash) impacts unit economics</li>
+                    <li><strong>Utilization critical:</strong> 85%+ utilization needed for breakeven. Gap between customers = lost revenue on depreciating asset</li>
+                    <li><strong>Customer acquisition cost:</strong> €600-800 CAC in competitive mobility market. 12-month payback required</li>
+                </ul>
+                <div class="insight-box warning">
+                    <strong>Existential Risk:</strong> If used car prices drop 15-20% (like 2022-2023), fleet value crashes → equity wipeout. Must hedge via diversified vehicle mix, residual value guarantees from OEMs.
+                </div>
+            </div>
+        </div>
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Competitive Landscape</h2>
+                <table>
+                    <tr>
+                        <th>Player</th>
+                        <th>Model</th>
+                        <th>Monthly Cost</th>
+                        <th>Commitment</th>
+                    </tr>
+                    <tr>
+                        <td><strong>FINN</strong></td>
+                        <td>Car subscription (all-inclusive)</td>
+                        <td>€400-800</td>
+                        <td>1-24 months</td>
+                    </tr>
+                    <tr>
+                        <td>Traditional Lease</td>
+                        <td>Long-term lease</td>
+                        <td>€300-600</td>
+                        <td>36-48 months</td>
+                    </tr>
+                    <tr>
+                        <td>Car Ownership</td>
+                        <td>Purchase</td>
+                        <td>€30K upfront + €300/mo</td>
+                        <td>Indefinite</td>
+                    </tr>
+                    <tr>
+                        <td>SIXT+</td>
+                        <td>Subscription (competitor)</td>
+                        <td>€500-900</td>
+                        <td>1-6 months</td>
+                    </tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Unit Economics Deep Dive</h2>
+                <h3>Per Vehicle Economics (18-Month Lifecycle)</h3>
+                <table>
+                    <tr>
+                        <th>Revenue/Cost</th>
+                        <th>Amount</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Revenue</strong></td>
+                        <td style="color: #10b981;">€9,900</td>
+                        <td>€550/mo × 18 months avg subscription</td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Cost</td>
+                        <td style="color: #ef4444;">-€25,000</td>
+                        <td>Purchase price (financed at 4% APR)</td>
+                    </tr>
+                    <tr>
+                        <td>Financing Cost</td>
+                        <td style="color: #ef4444;">-€750</td>
+                        <td>Interest on €25K loan over 18mo</td>
+                    </tr>
+                    <tr>
+                        <td>Insurance</td>
+                        <td style="color: #ef4444;">-€1,800</td>
+                        <td>€100/mo comprehensive</td>
+                    </tr>
+                    <tr>
+                        <td>Maintenance & Repairs</td>
+                        <td style="color: #ef4444;">-€900</td>
+                        <td>€50/mo avg (tires, service)</td>
+                    </tr>
+                    <tr>
+                        <td>Platform Costs</td>
+                        <td style="color: #ef4444;">-€720</td>
+                        <td>€40/mo (insurance brokerage, fleet mgmt software)</td>
+                    </tr>
+                    <tr>
+                        <td>Resale Value</td>
+                        <td style="color: #10b981;">+€18,500</td>
+                        <td>74% residual after 18mo (26% depreciation)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gross Profit</strong></td>
+                        <td style="color: #10b981; font-size: 1.2em;"><strong>€-770</strong></td>
+                        <td>LOSS on single cycle!</td>
+                    </tr>
+                </table>
+                <div class="insight-box warning">
+                    <strong>Unit Economics Reality:</strong> SINGLE subscription cycle unprofitable! Profitability requires FLEET OPTIMIZATION: (1) 2+ cycles per vehicle (re-rent after 18mo), (2) 90%+ utilization rate, (3) Better residual value (OEM partnerships).
+                </div>
+                <h3>Path to Profitability (Multi-Cycle Model)</h3>
+                <table>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Cycles</th>
+                        <th>Total Revenue</th>
+                        <th>Gross Profit</th>
+                    </tr>
+                    <tr>
+                        <td>Single Cycle</td>
+                        <td>1 × 18mo</td>
+                        <td>€9,900</td>
+                        <td style="color: #ef4444;">-€770</td>
+                    </tr>
+                    <tr>
+                        <td>Optimized (2 Cycles)</td>
+                        <td>2 × 18mo</td>
+                        <td>€19,800</td>
+                        <td style="color: #10b981;">+€2,500</td>
+                    </tr>
+                    <tr>
+                        <td>Best Case (3 Cycles)</td>
+                        <td>3 × 12mo (shorter subs)</td>
+                        <td>€19,800</td>
+                        <td style="color: #10b981;">+€4,200</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                <div class="insight-box success">
+                    <strong>📊 Fleet Utilization = Profitability Driver:</strong> 85% utilization (15% gap between subscriptions) = breakeven. 90%+ = strong margins. FINN optimizes via dynamic pricing (lower rates during gaps), shorter subscription lengths (more cycles/year).
+                </div>
+                <div class="insight-box">
+                    <strong>💰 Residual Value Risk = Biggest Threat:</strong> COVID used car spike (2021) helped margins. 2023 crash hurt. Solution: OEM partnerships (BMW, VW) with buyback guarantees at predetermined residuals.
+                </div>
+                <div class="insight-box warning">
+                    <strong>🚗 Depreciation Curve Matters:</strong> Luxury cars (BMW, Audi) depreciate faster (35% Year 1) but higher subscription fees. Mass market (VW, Toyota) slower depreciation (22%) but lower fees. Optimal mix: 60% mass market, 40% premium.
+                </div>
+                <div class="insight-box success">
+                    <strong>🎯 B2B = Higher Margins:</strong> Corporate subscriptions (50% of revenue) have 12-month+ commitments, lower churn, bulk discounts from OEMs. B2B LTV: €15K vs €8K B2C.
+                </div>
+            </div>
+        </div>
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+                <h3>1. Double Down on B2B Corporate</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> B2B customers (SMEs needing company cars) have 2x LTV, lower churn, predictable contracts.</p>
+                    <ul>
+                        <li>Target: 500-5,000 employee companies (sales teams, field service)</li>
+                        <li>Offer fleet management dashboard, bulk pricing</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> €200M ARR from B2B, 60% gross margins vs 40% B2C</p>
+                </div>
+                <h3>2. OEM Partnerships for Residual Guarantees</h3>
+                <div class="card" style="background: rgba(245, 158, 11, 0.1);">
+                    <p><strong>Rationale:</strong> Hedge depreciation risk. OEMs want distribution for EVs, FINN wants price certainty.</p>
+                    <ul>
+                        <li>Negotiate: BMW/VW guarantee 70% residual after 24mo</li>
+                        <li>In exchange: FINN commits to 5,000 EV orders/year</li>
+                    </ul>
+                    <p style="color: #f59e0b; margin-top: 15px;"><strong>Impact:</strong> Eliminates downside risk, unlocks debt financing</p>
+                </div>
+                <h3>3. Marketplace Model (Asset-Light Transition)</h3>
+                <div class="card" style="background: rgba(59, 130, 246, 0.1);">
+                    <p><strong>Rationale:</strong> Own fleet = capital-intensive. Launch marketplace: dealerships list cars, FINN takes 15% commission.</p>
+                    <ul>
+                        <li>Transition from €375M fleet to €0 (dealerships own cars)</li>
+                        <li>FINN = platform (insurance, contracts, payments)</li>
+                    </ul>
+                    <p style="color: #3b82f6; margin-top: 15px;"><strong>Impact:</strong> Asset-light = higher valuation multiples, faster scale</p>
+                </div>
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;"><strong>Takeaway:</strong> FINN's €100M ARR proves demand for car subscriptions. Unit economics challenging: single-cycle unprofitable, requires 2+ re-rentals + 90% utilization for margins. B2B corporate = highest margin segment (€15K LTV, 12+ month contracts). Key risks: (1) Used car price volatility, (2) Capital intensity limits growth, (3) Traditional leasing 30% cheaper. Solutions: OEM residual guarantees, marketplace pivot (asset-light), B2B focus. Path to €500M ARR requires solving capital efficiency or transitioning to platform model.</p>
+                </div>
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        const orange = '#f59e0b', green = '#10b981', red = '#ef4444';
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: { labels: ['FINN Subscription', 'Traditional Lease', 'Ownership (5yr)', 'SIXT+'], datasets: [{ label: 'Total Cost Over 36 Months (€)', data: [19800, 18000, 18000, 27000], backgroundColor: [orange, green, red, '#6b7280'] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Total Cost of Mobility Comparison', color: '#e8e8e8' } }, scales: { y: { ticks: { color: '#e8e8e8' } }, x: { ticks: { color: '#e8e8e8' } } } }
+        });
+    </script>
+</body>
+</html>

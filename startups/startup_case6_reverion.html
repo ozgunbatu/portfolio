@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverion Case Study | Biogas-to-Grid Innovation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', 'Arial', sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%); color: white; padding: 70px 40px; text-align: center; margin-bottom: 45px; border-radius: 12px; box-shadow: 0 15px 50px rgba(5, 150, 105, 0.3); position: relative; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #059669, #ffffff, #059669); }
+        h1 { font-size: 3em; margin-bottom: 18px; font-weight: 300; }
+        .subtitle { font-size: 1.25em; opacity: 0.95; font-weight: 300; }
+        .author-info { margin-top: 22px; font-size: 0.95em; opacity: 0.85; }
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center; }
+        .tab-button { padding: 14px 28px; background: rgba(5, 150, 105, 0.15); border: 2px solid rgba(5, 150, 105, 0.4); border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 500; transition: all 0.3s; color: #059669; }
+        .tab-button:hover { border-color: #059669; background: rgba(5, 150, 105, 0.25); transform: translateY(-2px); }
+        .tab-button.active { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: linear-gradient(135deg, rgba(5, 150, 105, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%); padding: 38px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 6px 25px rgba(0,0,0,0.3); border: 1px solid rgba(5, 150, 105, 0.2); transition: all 0.3s; }
+        .card:hover { transform: translateY(-6px); }
+        h2 { color: #059669; margin-bottom: 22px; font-size: 2em; font-weight: 400; padding-bottom: 12px; border-bottom: 3px solid rgba(5, 150, 105, 0.3); }
+        h3 { color: #10b981; margin: 28px 0 18px 0; font-size: 1.4em; font-weight: 500; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 32px 0; }
+        .metric-card { background: linear-gradient(135deg, rgba(5, 150, 105, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%); padding: 28px; border-radius: 10px; border-left: 4px solid #059669; transition: all 0.3s; }
+        .metric-card:hover { transform: scale(1.03); }
+        .metric-label { font-size: 0.9em; color: #a8b5c0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .metric-value { font-size: 2.3em; font-weight: 300; color: #059669; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 28px 0; border-radius: 10px; overflow: hidden; }
+        th { background: linear-gradient(135deg, rgba(5, 150, 105, 0.3) 0%, rgba(4, 120, 87, 0.3) 100%); padding: 18px; text-align: left; font-weight: 500; color: #059669; }
+        td { padding: 16px 18px; background: rgba(26, 31, 46, 0.4); border-bottom: 1px solid rgba(5, 150, 105, 0.1); }
+        tr:hover td { background: rgba(5, 150, 105, 0.08); }
+        .insight-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%); padding: 28px; border-radius: 10px; border-left: 5px solid #f59e0b; margin: 28px 0; line-height: 1.8; }
+        .insight-box.success { border-left-color: #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%); }
+        .chart-container { background: rgba(26, 31, 46, 0.6); padding: 30px; border-radius: 12px; margin: 28px 0; min-height: 350px; }
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+        .back-button { display: inline-block; padding: 12px 28px; background: rgba(5, 150, 105, 0.15); border: 2px solid rgba(5, 150, 105, 0.4); border-radius: 8px; color: #059669; text-decoration: none; font-weight: 500; margin-top: 35px; transition: all 0.3s; }
+        .back-button:hover { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; }
+        @media (max-width: 768px) { h1 { font-size: 2.2em; } .metric-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Reverion</h1>
+            <p class="subtitle">Converting Organic Waste into Renewable Energy</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Strategy</button>
+            <button class="tab-button" onclick="showTab('insights')">Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Munich-based Reverion develops reversible biogas fuel cells that convert organic waste into renewable electricity with 80% efficiency (vs 40% traditional)—targeting farms, waste facilities, and biogas plants with €100K-300K modular units.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Funding Raised</div>
+                        <div class="metric-value">€55M</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Series A (2023)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-value">80%</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">vs 40% Traditional</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Unit Price</div>
+                        <div class="metric-value">€100-300K</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Per System</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Payback Period</div>
+                        <div class="metric-value">4-6yrs</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">For Customers</div>
+                    </div>
+                </div>
+                <div class="insight-box success">
+                    <strong>Technology:</strong> Solid oxide fuel cell (SOFC) runs in reverse to produce green hydrogen when electricity cheap, converts biogas to electricity when prices high. Bidirectional operation = grid balancing revenue stream beyond energy production.
+                </div>
+            </div>
+        </div>
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can Reverion scale novel fuel cell technology from lab to commercial deployment, navigate complex energy regulations, prove economics to conservative agricultural customers—all while competing with established biogas incumbents?</p>
+                <h3>Market Barriers</h3>
+                <ul>
+                    <li><strong>Technology risk:</strong> Solid oxide fuel cells unproven at scale in biogas applications. Durability unknown (target: 10-year lifespan)</li>
+                    <li><strong>High CapEx:</strong> €200K average system cost. Farms/waste facilities need 4-6 year ROI proof before purchase</li>
+                    <li><strong>Subsidy dependency:</strong> German feed-in tariff (EEG) critical for economics. Policy changes = business model risk</li>
+                    <li><strong>Customer education:</strong> Farmers unfamiliar with hydrogen, fuel cells. Conservative buying behavior</li>
+                </ul>
+                <div class="insight-box warning">
+                    <strong>Execution Challenge:</strong> Scale from 10 pilot units to 1,000+ installations while proving 80% efficiency in real-world conditions and building service network for maintenance.
+                </div>
+            </div>
+        </div>
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Market Analysis</h2>
+                <table>
+                    <tr>
+                        <th>Customer Segment</th>
+                        <th>TAM</th>
+                        <th>Pain Point</th>
+                        <th>Reverion Value Prop</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Biogas Plants</strong></td>
+                        <td>9,500 in Germany</td>
+                        <td>Low efficiency (40%), aging infrastructure</td>
+                        <td>2x efficiency → 2x revenue from same waste</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dairy Farms</strong></td>
+                        <td>60,000 in Germany</td>
+                        <td>Manure disposal cost, energy bills</td>
+                        <td>Convert waste to income (€50K/year energy revenue)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Waste Facilities</strong></td>
+                        <td>500+ municipal</td>
+                        <td>Methane emissions, disposal costs</td>
+                        <td>Renewable energy + carbon credits</td>
+                    </tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Business Model</h2>
+                <h3>Revenue Streams</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Unit Sales</div>
+                        <div class="metric-value">€200K</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Avg system price. 40% gross margin. Target: 500 units/year by 2026</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Service Contracts</div>
+                        <div class="metric-value">€10K/yr</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Maintenance, monitoring. 70% margin. Recurring revenue</div>
+                    </div>
+                </div>
+                <h3>Customer Economics</h3>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>System Cost</td>
+                        <td>€200K (after subsidies: €120K)</td>
+                    </tr>
+                    <tr>
+                        <td>Annual Energy Revenue</td>
+                        <td>€50K (sell to grid at €0.15/kWh)</td>
+                    </tr>
+                    <tr>
+                        <td>Waste Disposal Savings</td>
+                        <td>€10K/year</td>
+                    </tr>
+                    <tr>
+                        <td>Total Annual Benefit</td>
+                        <td>€60K</td>
+                    </tr>
+                    <tr>
+                        <td>Payback Period</td>
+                        <td style="color: #10b981;">2 years (subsidized) / 3.3 years (unsubsidized)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                <div class="insight-box success">
+                    <strong>🔋 Bidirectional = Unique Moat:</strong> SOFC runs both directions: biogas→electricity AND electricity→hydrogen. Grid balancing revenue (sell flexibility) adds €15K/year beyond energy sales. Competitors (2G, BHKW) can't match.
+                </div>
+                <div class="insight-box">
+                    <strong>📊 Subsidy Dependency Risk:</strong> German EEG feed-in tariff guarantees €0.15/kWh (vs €0.08 market). Policy expires 2030. Business model requires diversification beyond subsidies.
+                </div>
+                <div class="insight-box success">
+                    <strong>🌍 EU Methane Regulation Tailwind:</strong> EU mandating methane capture from agriculture/waste by 2025. Farms face fines without solution. Reverion = compliance + revenue.
+                </div>
+            </div>
+        </div>
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+                <h3>1. Leasing Model for Farms</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> €200K upfront too high for farms. Offer €2K/month lease (7-year contract).</p>
+                    <ul>
+                        <li>Reduces barrier to adoption</li>
+                        <li>Predictable recurring revenue for Reverion</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> 3x conversion rate, €120M ARR from leasing</p>
+                </div>
+                <h3>2. Energy-as-a-Service</h3>
+                <div class="card" style="background: rgba(59, 130, 246, 0.1);">
+                    <p><strong>Rationale:</strong> Own systems, sell energy to customer at discount vs grid. Take merchant risk.</p>
+                    <ul>
+                        <li>€0.12/kWh to customer (vs €0.18 grid)</li>
+                        <li>Reverion earns spread</li>
+                    </ul>
+                    <p style="color: #3b82f6; margin-top: 15px;"><strong>Impact:</strong> Removes customer CapEx, scales faster</p>
+                </div>
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;"><strong>Takeaway:</strong> Reverion's 80% efficiency + bidirectional fuel cell = compelling value prop for biogas market. Key challenge: scaling manufacturing while proving durability in field. Subsidy dependency is risk—must diversify to grid services, carbon credits. Leasing/EaaS models unlock faster adoption. TAM: 70,000+ potential customers (biogas plants, farms, waste facilities) in Germany alone. European expansion feasible with similar energy policies.</p>
+                </div>
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        const green = '#059669', blue = '#3b82f6', orange = '#f59e0b';
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: { labels: ['Biogas Plants', 'Dairy Farms', 'Waste Facilities'], datasets: [{ label: 'TAM (Units)', data: [9500, 60000, 500], backgroundColor: [green, blue, orange] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Addressable Market (Germany)', color: '#e8e8e8' } }, scales: { y: { ticks: { color: '#e8e8e8' } }, x: { ticks: { color: '#e8e8e8' } } } }
+        });
+    </script>
+</body>
+</html>

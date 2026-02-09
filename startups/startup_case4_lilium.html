@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lilium Case Study | Urban Air Mobility Strategy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', 'Arial', sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%); color: white; padding: 70px 40px; text-align: center; margin-bottom: 45px; border-radius: 12px; box-shadow: 0 15px 50px rgba(124, 58, 237, 0.3); position: relative; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #7c3aed, #ffffff, #7c3aed); }
+        h1 { font-size: 3em; margin-bottom: 18px; font-weight: 300; }
+        .subtitle { font-size: 1.25em; opacity: 0.95; font-weight: 300; }
+        .author-info { margin-top: 22px; font-size: 0.95em; opacity: 0.85; }
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center; }
+        .tab-button { padding: 14px 28px; background: rgba(124, 58, 237, 0.15); border: 2px solid rgba(124, 58, 237, 0.4); border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 500; transition: all 0.3s; color: #7c3aed; }
+        .tab-button:hover { border-color: #7c3aed; background: rgba(124, 58, 237, 0.25); transform: translateY(-2px); }
+        .tab-button.active { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%); padding: 38px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 6px 25px rgba(0,0,0,0.3); border: 1px solid rgba(124, 58, 237, 0.2); transition: all 0.3s; }
+        .card:hover { transform: translateY(-6px); }
+        h2 { color: #7c3aed; margin-bottom: 22px; font-size: 2em; font-weight: 400; padding-bottom: 12px; border-bottom: 3px solid rgba(124, 58, 237, 0.3); }
+        h3 { color: #a78bfa; margin: 28px 0 18px 0; font-size: 1.4em; font-weight: 500; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 32px 0; }
+        .metric-card { background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%); padding: 28px; border-radius: 10px; border-left: 4px solid #7c3aed; transition: all 0.3s; }
+        .metric-card:hover { transform: scale(1.03); }
+        .metric-label { font-size: 0.9em; color: #a8b5c0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .metric-value { font-size: 2.3em; font-weight: 300; color: #7c3aed; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 28px 0; border-radius: 10px; overflow: hidden; }
+        th { background: linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, rgba(109, 40, 217, 0.3) 100%); padding: 18px; text-align: left; font-weight: 500; color: #7c3aed; }
+        td { padding: 16px 18px; background: rgba(26, 31, 46, 0.4); border-bottom: 1px solid rgba(124, 58, 237, 0.1); }
+        tr:hover td { background: rgba(124, 58, 237, 0.08); }
+        .insight-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(124, 58, 237, 0.1) 100%); padding: 28px; border-radius: 10px; border-left: 5px solid #f59e0b; margin: 28px 0; line-height: 1.8; }
+        .insight-box.success { border-left-color: #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(124, 58, 237, 0.1) 100%); }
+        .insight-box.warning { border-left-color: #ef4444; }
+        .chart-container { background: rgba(26, 31, 46, 0.6); padding: 30px; border-radius: 12px; margin: 28px 0; min-height: 350px; }
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+        .back-button { display: inline-block; padding: 12px 28px; background: rgba(124, 58, 237, 0.15); border: 2px solid rgba(124, 58, 237, 0.4); border-radius: 8px; color: #7c3aed; text-decoration: none; font-weight: 500; margin-top: 35px; transition: all 0.3s; }
+        .back-button:hover { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; }
+        @media (max-width: 768px) { h1 { font-size: 2.2em; } .metric-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Lilium</h1>
+            <p class="subtitle">Electric Vertical Takeoff & Landing Revolution</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Strategy</button>
+            <button class="tab-button" onclick="showTab('insights')">Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Munich-based Lilium pioneers urban air mobility with world's first all-electric jet-powered eVTOL aircraft—navigating $1B+ R&D, EASA certification, infrastructure buildout to capture $1.5T future aviation market.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Peak Market Cap</div>
+                        <div class="metric-value">$3.3B</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">SPAC Merger (2021)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Pre-Orders</div>
+                        <div class="metric-value">700+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Aircraft ($5B Order Book)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Range</div>
+                        <div class="metric-value">300km</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Per Charge</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Certification Target</div>
+                        <div class="metric-value">2026</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">EASA Type Certificate</div>
+                    </div>
+                </div>
+                <div class="insight-box success">
+                    <strong>Technology:</strong> 36-engine distributed electric propulsion system enables quiet (60dB vs 80dB helicopter), long-range (300km vs 150km competitors), high-speed (280km/h) regional air mobility. Target: Munich-Nuremberg in 35min vs 2hrs car.
+                </div>
+            </div>
+        </div>
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can startup certify novel aircraft architecture, build vertiport infrastructure, navigate multi-jurisdictional aviation regulations, achieve commercial viability before capital runs out—competing with Airbus, Boeing, 100+ eVTOL startups?</p>
+                <h3>Technical & Regulatory Barriers</h3>
+                <ul>
+                    <li><strong>Novel propulsion:</strong> 36 ducted electric jets vs traditional rotors. EASA certification: 3-5 years, 15,000+ test flight hours</li>
+                    <li><strong>Battery density:</strong> Current 250 Wh/kg vs target 300+ Wh/kg for 300km range. Every 10% improvement = +30km</li>
+                    <li><strong>Infrastructure chicken-egg:</strong> Need vertiports for operations, but vertiports need demand. €5-15M each</li>
+                    <li><strong>Capital intensity:</strong> Pre-revenue burn: €200M+/year. Total needed: €2-3B through commercialization. Path to profitability: 2027-2028</li>
+                </ul>
+                <div class="insight-box warning">
+                    <strong>Existential Risk:</strong> Certification delays beyond 2026 = cash runway risk. Stock down 85% from SPAC peak. Dilution risk if capital markets unfavorable. Only 2-3 eVTOL companies will survive long-term.
+                </div>
+            </div>
+        </div>
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Competitive Landscape</h2>
+                <table>
+                    <tr>
+                        <th>Company</th>
+                        <th>Architecture</th>
+                        <th>Range</th>
+                        <th>Speed</th>
+                        <th>Certification</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Lilium</strong></td>
+                        <td>Electric Jet (36 engines)</td>
+                        <td style="color: #10b981;">300km</td>
+                        <td>280 km/h</td>
+                        <td>EASA 2026</td>
+                    </tr>
+                    <tr>
+                        <td>Joby Aviation</td>
+                        <td>Tiltrotor (6 rotors)</td>
+                        <td>240km</td>
+                        <td style="color: #10b981;">320 km/h</td>
+                        <td>FAA 2025</td>
+                    </tr>
+                    <tr>
+                        <td>Volocopter</td>
+                        <td>Multicopter (18 rotors)</td>
+                        <td style="color: #ef4444;">35km</td>
+                        <td style="color: #ef4444;">110 km/h</td>
+                        <td>EASA 2024</td>
+                    </tr>
+                    <tr>
+                        <td>Archer</td>
+                        <td>Tilt-wing (12 rotors)</td>
+                        <td>160km</td>
+                        <td>240 km/h</td>
+                        <td>FAA 2025</td>
+                    </tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Go-to-Market Strategy</h2>
+                <h3>Dual Revenue Streams</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Aircraft Sales (B2B)</div>
+                        <div class="metric-value">$3-4M</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Per jet. Customers: Airlines (Azul, Saudia), airports, government</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Flight Operations (B2C)</div>
+                        <div class="metric-value">€250</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Avg ticket (100km). 60% margin. Routes: Munich-Nuremberg, Paris-Nice</div>
+                    </div>
+                </div>
+                <h3>Unit Economics (2028 Target)</h3>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Annual Revenue per Jet</td>
+                        <td>€2.8M (€2.4M flights + €400K maintenance)</td>
+                    </tr>
+                    <tr>
+                        <td>Operating Costs</td>
+                        <td>€880K (energy, pilots, maintenance, vertiport fees)</td>
+                    </tr>
+                    <tr>
+                        <td>EBITDA per Jet</td>
+                        <td style="color: #10b981;">€1.92M (68.6% margin)</td>
+                    </tr>
+                    <tr>
+                        <td>Payback Period</td>
+                        <td>1.9 years at 75% load factor</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                <div class="insight-box success">
+                    <strong>✈️ Certification = Moat:</strong> EASA Type Certificate takes 3-5 years, €400M+ investment. Only 2-3 eVTOL companies achieve by 2026. Lilium's 2015 start = 2-year advantage. Post-certification, each competitor faces same 5-year barrier.
+                </div>
+                <div class="insight-box">
+                    <strong>🔋 Battery Technology Bottleneck:</strong> Current 250 Wh/kg vs target 300+. Vertical integration (in-house R&D) = advantage but capital-intensive (€150M investment). Off-the-shelf batteries insufficient.
+                </div>
+                <div class="insight-box warning">
+                    <strong>💰 Capital Intensity Risk:</strong> €200M+/year burn pre-revenue. Total €2-3B needed through commercialization. Stock down 85% from peak—dilution risk if markets unfavorable.
+                </div>
+                <div class="insight-box success">
+                    <strong>🌍 Regional Routes = Differentiation:</strong> 300km range targets €115B regional market vs €30B urban air taxi. Higher willingness-to-pay for 100-300km business travel (Munich-Zurich) vs 10-30km urban hops.
+                </div>
+            </div>
+        </div>
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+                <h3>1. Accelerate Certification Timeline</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> Target mid-2025 vs late-2026 = 12-month first-mover advantage over Joby, Archer.</p>
+                    <ul>
+                        <li>Dedicate 70% engineering to EASA compliance</li>
+                        <li>Run parallel test campaigns (Spain, Germany facilities)</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> Market leadership, pricing power</p>
+                </div>
+                <h3>2. Secure Strategic OEM Partnership</h3>
+                <div class="card" style="background: rgba(245, 158, 11, 0.1);">
+                    <p><strong>Rationale:</strong> Partner with Airbus/Boeing for manufacturing scale, supply chain, certification expertise.</p>
+                    <ul>
+                        <li>Trade: 15-20% equity for production capacity + distribution</li>
+                        <li>De-risks execution, validates technology</li>
+                    </ul>
+                    <p style="color: #f59e0b; margin-top: 15px;"><strong>Impact:</strong> Credibility, faster time-to-market</p>
+                </div>
+                <h3>3. Infrastructure Co-Investment</h3>
+                <div class="card" style="background: rgba(168, 85, 247, 0.1);">
+                    <p><strong>Rationale:</strong> JV with Fraport for vertiport development (€200M fund).</p>
+                    <ul>
+                        <li>Lilium: operational expertise. Fraport: capital + real estate</li>
+                        <li>Aligns incentives, accelerates rollout to 20+ cities by 2028</li>
+                    </ul>
+                    <p style="color: #a855f7; margin-top: 15px;"><strong>Impact:</strong> Solves chicken-egg problem</p>
+                </div>
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;"><strong>Takeaway:</strong> Classic deep tech bet: massive TAM ($1.5T), high barriers (certification, battery, infrastructure), extreme execution risk. Success hinges on: (1) EASA certification by 2026, (2) Securing $500M+ additional capital, (3) Proving 75% load factor assumption. Regional focus (300km) strategically sound vs urban taxis. Winner-take-most dynamics—only 2-3 survive. Lilium advantages: EASA progress, jet propulsion, partnerships. Weakness: stock decline limits capital access—potential M&A target for Airbus/Boeing if timeline slips.</p>
+                </div>
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        const purple = '#7c3aed', green = '#10b981', orange = '#f59e0b', blue = '#3b82f6';
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: { labels: ['Lilium', 'Joby', 'Volocopter', 'Archer'], datasets: [{ label: 'Range (km)', data: [300, 240, 35, 160], backgroundColor: [purple, blue, orange, green] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'eVTOL Range Comparison', color: '#e8e8e8' } }, scales: { y: { ticks: { color: '#e8e8e8' } }, x: { ticks: { color: '#e8e8e8' } } } }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wefox Case Study | B2B2C Insurance Digitalization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', 'Arial', sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%); color: white; padding: 70px 40px; text-align: center; margin-bottom: 45px; border-radius: 12px; box-shadow: 0 15px 50px rgba(59, 130, 246, 0.3); position: relative; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #3b82f6, #ffffff, #3b82f6); }
+        h1 { font-size: 3em; margin-bottom: 18px; font-weight: 300; }
+        .subtitle { font-size: 1.25em; opacity: 0.95; font-weight: 300; }
+        .author-info { margin-top: 22px; font-size: 0.95em; opacity: 0.85; }
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center; }
+        .tab-button { padding: 14px 28px; background: rgba(59, 130, 246, 0.15); border: 2px solid rgba(59, 130, 246, 0.4); border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 500; transition: all 0.3s; color: #3b82f6; }
+        .tab-button:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.25); transform: translateY(-2px); }
+        .tab-button.active { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%); padding: 38px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 6px 25px rgba(0,0,0,0.3); border: 1px solid rgba(59, 130, 246, 0.2); transition: all 0.3s; }
+        .card:hover { transform: translateY(-6px); }
+        h2 { color: #3b82f6; margin-bottom: 22px; font-size: 2em; font-weight: 400; padding-bottom: 12px; border-bottom: 3px solid rgba(59, 130, 246, 0.3); }
+        h3 { color: #60a5fa; margin: 28px 0 18px 0; font-size: 1.4em; font-weight: 500; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 32px 0; }
+        .metric-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%); padding: 28px; border-radius: 10px; border-left: 4px solid #3b82f6; transition: all 0.3s; }
+        .metric-card:hover { transform: scale(1.03); }
+        .metric-label { font-size: 0.9em; color: #a8b5c0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .metric-value { font-size: 2.3em; font-weight: 300; color: #3b82f6; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 28px 0; border-radius: 10px; overflow: hidden; }
+        th { background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%); padding: 18px; text-align: left; font-weight: 500; color: #3b82f6; }
+        td { padding: 16px 18px; background: rgba(26, 31, 46, 0.4); border-bottom: 1px solid rgba(59, 130, 246, 0.1); }
+        tr:hover td { background: rgba(59, 130, 246, 0.08); }
+        .insight-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%); padding: 28px; border-radius: 10px; border-left: 5px solid #f59e0b; margin: 28px 0; line-height: 1.8; }
+        .insight-box.success { border-left-color: #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%); }
+        .insight-box.warning { border-left-color: #ef4444; }
+        .chart-container { background: rgba(26, 31, 46, 0.6); padding: 30px; border-radius: 12px; margin: 28px 0; min-height: 350px; }
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+        .back-button { display: inline-block; padding: 12px 28px; background: rgba(59, 130, 246, 0.15); border: 2px solid rgba(59, 130, 246, 0.4); border-radius: 8px; color: #3b82f6; text-decoration: none; font-weight: 500; margin-top: 35px; transition: all 0.3s; }
+        .back-button:hover { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
+        @media (max-width: 768px) { h1 { font-size: 2.2em; } .metric-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>wefox</h1>
+            <p class="subtitle">B2B2C Insurance Digitalization Strategy</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Strategy</button>
+            <button class="tab-button" onclick="showTab('insights')">Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Berlin-based wefox became Europe's most valuable insurtech ($4.5B valuation) by embedding insurance products into broker networks—combining traditional trust with digital convenience to reach 2M+ customers through B2B2C model.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Valuation</div>
+                        <div class="metric-value">$4.5B</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Series E (2022)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Customers</div>
+                        <div class="metric-value">2M+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Via 1,500+ Brokers</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Gross Written Premium</div>
+                        <div class="metric-value">€1.2B</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Annual (2023)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Combined Ratio</div>
+                        <div class="metric-value">96%</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">vs 98% Industry Avg</div>
+                    </div>
+                </div>
+                <div class="insight-box success">
+                    <strong>Business Model:</strong> B2B2C platform empowering 1,500+ insurance brokers with digital tools (ONE platform). Brokers use wefox tech for policy management, claims processing. wefox earns 20% commission share + SaaS fees while owning carrier (wefox Insurance AG) for margin control.
+                </div>
+            </div>
+        </div>
+
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can a digital-first platform compete with 100+ year-old incumbents (Allianz, AXA, Munich Re) in trust-based industry where 75% policies sold via traditional brokers?</p>
+                <h3>Market Barriers</h3>
+                <ul>
+                    <li><strong>Offline dominance:</strong> 95% European insurance offline. NPS for incumbents: -20 vs wefox: +45</li>
+                    <li><strong>Slow claims:</strong> Traditional process: 30+ days. Customer pain point but incumbents slow to innovate</li>
+                    <li><strong>Capital requirements:</strong> €3-5M reserves per market (BaFin, EIOPA licensing). High barrier to entry</li>
+                    <li><strong>Trust challenge:</strong> Direct-to-consumer failed (Friendsurance). Europeans prefer broker relationships</li>
+                </ul>
+                <div class="insight-box warning">
+                    <strong>Core Challenge:</strong> Build digital insurance platform that empowers (not replaces) brokers—proving tech can enhance rather than disrupt traditional distribution model while achieving profitable unit economics.
+                </div>
+            </div>
+        </div>
+
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Competitive Positioning</h2>
+                <table>
+                    <tr>
+                        <th>Player</th>
+                        <th>Model</th>
+                        <th>Strength</th>
+                        <th>Weakness</th>
+                    </tr>
+                    <tr>
+                        <td><strong>wefox</strong></td>
+                        <td>B2B2C (Brokers)</td>
+                        <td>Trust + Tech, 92% broker retention</td>
+                        <td>Broker dependency</td>
+                    </tr>
+                    <tr>
+                        <td>Lemonade</td>
+                        <td>D2C (Direct)</td>
+                        <td>Pure digital UX</td>
+                        <td>Low trust in EU, struggled</td>
+                    </tr>
+                    <tr>
+                        <td>Clark</td>
+                        <td>Digital Broker</td>
+                        <td>Policy aggregation</td>
+                        <td>No carrier control, lower margins</td>
+                    </tr>
+                    <tr>
+                        <td>Allianz/AXA</td>
+                        <td>Traditional</td>
+                        <td>Brand, capital, scale</td>
+                        <td>Legacy tech, slow claims</td>
+                    </tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Revenue Model</h2>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <h3>Unit Economics</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Customer LTV</div>
+                        <div class="metric-value">€2,400</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">6-year avg lifespan</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">CAC</div>
+                        <div class="metric-value">€180</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">13-month payback</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">LTV/CAC</div>
+                        <div class="metric-value">13x</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Target: 15x by 2025</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Annual Retention</div>
+                        <div class="metric-value">89%</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">vs 75% industry</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                <div class="insight-box success">
+                    <strong>🎯 Broker Model = Trust Arbitrage:</strong> Europeans trust personal brokers (75% market). wefox empowers brokers instead of replacing—avoiding Lemonade's D2C struggles. Broker retention: 92%.
+                </div>
+                <div class="insight-box">
+                    <strong>💰 Vertical Integration Drives Margins:</strong> Owning carrier (wefox Insurance AG) = 30% margin vs 15% pure distributor. Combined ratio improved 102% → 96% via AI fraud detection.
+                </div>
+                <div class="insight-box success">
+                    <strong>🤖 AI Claims = Killer Feature:</strong> Photo-based claims auto-approved 70% cases in <24hrs. Customer satisfaction +35pp vs traditional. Cost: €12/claim vs €85 manual.
+                </div>
+                <div class="insight-box warning">
+                    <strong>🌍 Regulatory Complexity:</strong> Each European market = separate license. Germany (BaFin), France (ACPR) different capital requirements. Cross-border slower than SaaS.
+                </div>
+            </div>
+        </div>
+
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+                <h3>1. Expand Product Mix</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> Cross-sell to 2.3 → 4.0 policies/customer. Higher LTV (€2,400 → €5,500).</p>
+                    <ul>
+                        <li>Launch life, health, commercial insurance</li>
+                        <li>Partner with employers for group policies (B2B2E)</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> +€1B GWP, 2.3x LTV increase</p>
+                </div>
+                <h3>2. White-Label SaaS</h3>
+                <div class="card" style="background: rgba(245, 158, 11, 0.1);">
+                    <p><strong>Rationale:</strong> License ONE platform to traditional insurers. €2M/year per license.</p>
+                    <ul>
+                        <li>TAM: 5,000+ European insurers</li>
+                        <li>Transition from competitor to enabler</li>
+                    </ul>
+                    <p style="color: #f59e0b; margin-top: 15px;"><strong>Impact:</strong> €200M ARR, 60% margins</p>
+                </div>
+                <h3>3. Embedded Insurance</h3>
+                <div class="card" style="background: rgba(168, 85, 247, 0.1);">
+                    <p><strong>Rationale:</strong> Partner with e-commerce, mobility (FINN, SIXT) for point-of-sale insurance.</p>
+                    <ul>
+                        <li>Rental car insurance at checkout</li>
+                        <li>Distribution advantage—reach at point of need</li>
+                    </ul>
+                    <p style="color: #a855f7; margin-top: 15px;"><strong>Impact:</strong> €100M incremental GWP</p>
+                </div>
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;"><strong>Takeaway:</strong> wefox validates hybrid models (digital + human) win in trust-based industries. Key: don't disrupt distribution—enhance it. Vertical integration (own carrier) + horizontal scale (broker network) = defensible moat. Risk: broker churn if fees increase. Long-term advantage: AI claims + cross-sell economics.</p>
+                </div>
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        const blue = '#3b82f6', green = '#10b981', orange = '#f59e0b', red = '#ef4444';
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: { labels: ['wefox NPS', 'Clark NPS', 'Lemonade NPS', 'Traditional NPS'], datasets: [{ label: 'Net Promoter Score', data: [45, 28, 18, -20], backgroundColor: [green, blue, orange, red] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Customer Satisfaction Comparison', color: '#e8e8e8' } }, scales: { y: { ticks: { color: '#e8e8e8' } }, x: { ticks: { color: '#e8e8e8' } } } }
+        });
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'doughnut',
+            data: { labels: ['Commission 45%', 'Underwriting 30%', 'SaaS 15%', 'Claims Tech 10%'], datasets: [{ data: [135, 90, 45, 30], backgroundColor: [blue, green, orange, red] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Revenue Breakdown (€300M, 2023)', color: '#e8e8e8' }, legend: { position: 'right', labels: { color: '#e8e8e8' } } } }
+        });
+    </script>
+</body>
+</html>

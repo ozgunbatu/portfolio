@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Republic Case Study | Commission-Free Trading Strategy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            color: white;
+            padding: 70px 40px;
+            text-align: center;
+            margin-bottom: 45px;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #ffffff, #3b82f6);
+        }
+        h1 { 
+            font-size: 3em; 
+            margin-bottom: 18px; 
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        .subtitle { 
+            font-size: 1.25em; 
+            opacity: 0.95; 
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .author-info {
+            margin-top: 22px;
+            font-size: 0.95em;
+            opacity: 0.85;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tab-button {
+            padding: 14px 28px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #3b82f6;
+            letter-spacing: 0.5px;
+        }
+        .tab-button:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border-color: #3b82f6;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .content-section { display: none; animation: fadeIn 0.5s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%);
+            padding: 38px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.25);
+        }
+
+        h2 {
+            color: #3b82f6;
+            margin-bottom: 22px;
+            font-size: 2em;
+            font-weight: 400;
+            padding-bottom: 12px;
+            border-bottom: 3px solid rgba(59, 130, 246, 0.3);
+        }
+        h3 {
+            color: #60a5fa;
+            margin: 28px 0 18px 0;
+            font-size: 1.4em;
+            font-weight: 500;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+            margin: 32px 0;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%);
+            padding: 28px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        .metric-label {
+            font-size: 0.9em;
+            color: #a8b5c0;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+        .metric-value {
+            font-size: 2.3em;
+            font-weight: 300;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 28px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%);
+            padding: 18px;
+            text-align: left;
+            font-weight: 500;
+            color: #3b82f6;
+        }
+        td {
+            padding: 16px 18px;
+            background: rgba(26, 31, 46, 0.4);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        tr:hover td {
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+            padding: 28px;
+            border-radius: 10px;
+            border-left: 5px solid #f59e0b;
+            margin: 28px 0;
+            line-height: 1.8;
+        }
+        .insight-box.success { border-left-color: #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%); }
+        .insight-box.warning { border-left-color: #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%); }
+
+        .chart-container {
+            background: rgba(26, 31, 46, 0.6);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 28px 0;
+            min-height: 350px;
+        }
+
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 28px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 35px;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .nav-tabs { gap: 8px; }
+            .tab-button { padding: 10px 18px; font-size: 0.85em; }
+            .metric-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Trade Republic</h1>
+            <p class="subtitle">Democratizing European Investing Through Commission-Free Trading</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Market Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Business Model</button>
+            <button class="tab-button" onclick="showTab('insights')">Key Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Trade Republic disrupted European retail investing by offering commission-free trading via mobile-first platform, scaling to €5.3B valuation and 4M+ users through payment-for-order-flow monetization and superior UX.</p>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Valuation</div>
+                        <div class="metric-value">€5.3B</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Series C (2024)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Active Users</div>
+                        <div class="metric-value">4M+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Across 17 Countries</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Assets Under Custody</div>
+                        <div class="metric-value">€50B+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Growing 85% YoY</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Commission Fee</div>
+                        <div class="metric-value">€0</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">vs €10-25 Traditional</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHALLENGE -->
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can a mobile-first brokerage compete with 30+ year incumbents in risk-averse Germany while building profitable €0-commission business?</p>
+                
+                <h3>Market Barriers</h3>
+                <ul>
+                    <li><strong>Low participation:</strong> 65% Germans don't invest in stocks (cultural risk aversion)</li>
+                    <li><strong>High fees:</strong> €10-25/trade prohibitive for small investors</li>
+                    <li><strong>Legacy UX:</strong> 5-7 day onboarding, branch visits required</li>
+                    <li><strong>Regulatory:</strong> BaFin license requires €730K capital + compliance</li>
+                </ul>
+
+                <div class="insight-box warning">
+                    <strong>Core Challenge:</strong> Build trust with risk-averse Germans while competing against century-old banks—without charging fees that traditional brokers rely on for 60% revenue.
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYSIS -->
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Competitive Landscape</h2>
+                <table>
+                    <tr>
+                        <th>Player</th>
+                        <th>Fees</th>
+                        <th>Mobile UX</th>
+                        <th>Users</th>
+                        <th>Key Strength</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Trade Republic</strong></td>
+                        <td style="color: #10b981;">€0</td>
+                        <td style="color: #10b981;">9.5/10</td>
+                        <td>4M+</td>
+                        <td>Mobile-first, Gen-Z appeal</td>
+                    </tr>
+                    <tr>
+                        <td>Scalable Capital</td>
+                        <td style="color: #10b981;">€0.99</td>
+                        <td>8.5/10</td>
+                        <td>600K</td>
+                        <td>Robo-advisor</td>
+                    </tr>
+                    <tr>
+                        <td>Comdirect</td>
+                        <td style="color: #ef4444;">€4.90+</td>
+                        <td>6/10</td>
+                        <td>2.5M</td>
+                        <td>Brand trust</td>
+                    </tr>
+                </table>
+
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- STRATEGY -->
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Revenue Model</h2>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <h3>Unit Economics</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">CAC</div>
+                        <div class="metric-value">€45</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Down from €80 (2020)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">ARPU</div>
+                        <div class="metric-value">€75</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Annual revenue/user</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">LTV</div>
+                        <div class="metric-value">€450</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">6-year lifespan</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Payback</div>
+                        <div class="metric-value">14mo</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">LTV/CAC: 10x</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSIGHTS -->
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                
+                <div class="insight-box success">
+                    <strong>🎯 Perfect Timing:</strong> Launched before COVID crash when retail interest surged. GameStop frenzy (2021) drove viral adoption—MAU grew 300% in 2020-2021.
+                </div>
+
+                <div class="insight-box">
+                    <strong>💰 Revenue Diversification:</strong> Pivoted from PFOF (45%) to interest income (30%) + subscriptions as EU considers PFOF ban. High interest rates (4%+) improved margins dramatically.
+                </div>
+
+                <div class="insight-box success">
+                    <strong>📱 Mobile-First Moat:</strong> 8-minute onboarding impossible for desktop brokers. 85% trades on mobile. Data flywheel enables personalized nudges.
+                </div>
+
+                <div class="insight-box warning">
+                    <strong>🌍 Expansion Challenges:</strong> Each country = separate regulatory approval. France/Italy localization costs high—growth slowing outside DACH.
+                </div>
+            </div>
+        </div>
+
+        <!-- RECOMMENDATIONS -->
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+
+                <h3>1. Double Down on Savingsplans</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> 90-day retention 78% (vs 45% traders). Predictable revenue.</p>
+                    <ul>
+                        <li>Goal-based savings (house, retirement)</li>
+                        <li>AI portfolio nudges</li>
+                        <li>B2B2C payroll deductions</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> +15pp retention, +€60 ARPU</p>
+                </div>
+
+                <h3>2. Expand Lending Products</h3>
+                <div class="card" style="background: rgba(59, 130, 246, 0.1);">
+                    <p><strong>Rationale:</strong> €50B AUC = collateral. ARPU uplift €40-60.</p>
+                    <ul>
+                        <li>Margin trading (2x leverage, 5% APR)</li>
+                        <li>Securities-based loans (3-4% APR)</li>
+                    </ul>
+                    <p style="color: #3b82f6; margin-top: 15px;"><strong>Impact:</strong> €180M incremental revenue</p>
+                </div>
+
+                <h3>3. B2B White-Label Platform</h3>
+                <div class="card" style="background: rgba(245, 158, 11, 0.1);">
+                    <p><strong>Rationale:</strong> 2,000+ EU banks need digital transformation.</p>
+                    <ul>
+                        <li>SaaS: €500K/year + rev share</li>
+                        <li>60% margin vs 40% retail</li>
+                    </ul>
+                    <p style="color: #f59e0b; margin-top: 15px;"><strong>Impact:</strong> €200M ARR by 2027</p>
+                </div>
+
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;">
+                        <strong>Takeaway:</strong> Regulatory arbitrage + superior UX disrupted entrenched finance. Key risk: PFOF dependency. Long-term moat: custody scale, community, vertical integration into banking.
+                    </p>
+                </div>
+
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        const blue = '#3b82f6', green = '#10b981', orange = '#f59e0b', red = '#ef4444';
+
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: {
+                labels: ['TAM', 'SAM', 'SOM'],
+                datasets: [{
+                    label: 'Market Size (€B)',
+                    data: [180, 45, 4.5],
+                    backgroundColor: [blue, '#2563eb', green]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'European Retail Brokerage Opportunity', color: '#e8e8e8' },
+                    legend: { labels: { color: '#e8e8e8' } }
+                },
+                scales: {
+                    y: { ticks: { color: '#e8e8e8' }, grid: { color: 'rgba(59,130,246,0.1)' } },
+                    x: { ticks: { color: '#e8e8e8' }, grid: { color: 'rgba(59,130,246,0.1)' } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['PFOF 45%', 'Interest 30%', 'Lending 15%', 'Subs 7%', 'FX 3%'],
+                datasets: [{
+                    data: [135, 90, 45, 21, 9],
+                    backgroundColor: [blue, green, orange, red, '#2563eb']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Revenue Model (€300M, 2023)', color: '#e8e8e8' },
+                    legend: { position: 'right', labels: { color: '#e8e8e8' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

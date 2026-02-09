@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1KOMMA5° Case Study | Climate Tech Scaling Strategy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', 'Arial', sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%); color: white; padding: 70px 40px; text-align: center; margin-bottom: 45px; border-radius: 12px; box-shadow: 0 15px 50px rgba(16, 185, 129, 0.3); position: relative; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #10b981, #ffffff, #10b981); }
+        h1 { font-size: 3em; margin-bottom: 18px; font-weight: 300; }
+        .subtitle { font-size: 1.25em; opacity: 0.95; font-weight: 300; }
+        .author-info { margin-top: 22px; font-size: 0.95em; opacity: 0.85; }
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center; }
+        .tab-button { padding: 14px 28px; background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.4); border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 500; transition: all 0.3s; color: #10b981; }
+        .tab-button:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.25); transform: translateY(-2px); }
+        .tab-button.active { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%); padding: 38px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 6px 25px rgba(0,0,0,0.3); border: 1px solid rgba(16, 185, 129, 0.2); transition: all 0.3s; }
+        .card:hover { transform: translateY(-6px); }
+        h2 { color: #10b981; margin-bottom: 22px; font-size: 2em; font-weight: 400; padding-bottom: 12px; border-bottom: 3px solid rgba(16, 185, 129, 0.3); }
+        h3 { color: #34d399; margin: 28px 0 18px 0; font-size: 1.4em; font-weight: 500; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 32px 0; }
+        .metric-card { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%); padding: 28px; border-radius: 10px; border-left: 4px solid #10b981; transition: all 0.3s; }
+        .metric-card:hover { transform: scale(1.03); }
+        .metric-label { font-size: 0.9em; color: #a8b5c0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .metric-value { font-size: 2.3em; font-weight: 300; color: #10b981; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 28px 0; border-radius: 10px; overflow: hidden; }
+        th { background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%); padding: 18px; text-align: left; font-weight: 500; color: #10b981; }
+        td { padding: 16px 18px; background: rgba(26, 31, 46, 0.4); border-bottom: 1px solid rgba(16, 185, 129, 0.1); }
+        tr:hover td { background: rgba(16, 185, 129, 0.08); }
+        .insight-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%); padding: 28px; border-radius: 10px; border-left: 5px solid #f59e0b; margin: 28px 0; line-height: 1.8; }
+        .insight-box.success { border-left-color: #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%); }
+        .insight-box.warning { border-left-color: #ef4444; }
+        .chart-container { background: rgba(26, 31, 46, 0.6); padding: 30px; border-radius: 12px; margin: 28px 0; min-height: 350px; }
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+        .back-button { display: inline-block; padding: 12px 28px; background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.4); border-radius: 8px; color: #10b981; text-decoration: none; font-weight: 500; margin-top: 35px; transition: all 0.3s; }
+        .back-button:hover { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
+        @media (max-width: 768px) { h1 { font-size: 2.2em; } .metric-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>1KOMMA5°</h1>
+            <p class="subtitle">Decarbonizing Residential Heating Through Heat Pump & Solar Rollout</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Strategy</button>
+            <button class="tab-button" onclick="showTab('insights')">Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>1KOMMA5° is scaling Germany's residential energy transition by combining heat pump installation, solar panels, and intelligent energy management—targeting €500M ARR by 2025 through installer network buildout and customer acquisition in regulated climate tech market.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Valuation</div>
+                        <div class="metric-value">€1B+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Unicorn Status (2023)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Target ARR</div>
+                        <div class="metric-value">€500M</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">By 2025</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Installations</div>
+                        <div class="metric-value">10K+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Heat Pumps & Solar (2023)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Installer Network</div>
+                        <div class="metric-value">50+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Acquired Companies</div>
+                    </div>
+                </div>
+                <div class="insight-box success">
+                    <strong>Business Model:</strong> Vertically integrated climate tech: (1) Acquire regional HVAC installers, (2) Sell heat pumps + solar to homeowners, (3) Add software layer (Heartbeat) for energy optimization. Revenue: installation fees (€20-30K/customer) + recurring energy management (€15/month).
+                </div>
+            </div>
+        </div>
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can 1KOMMA5° scale heat pump installation faster than fragmented regional competitors while navigating Germany's complex subsidy programs, installer shortage, and customer acquisition costs—achieving profitability before cash runs out?</p>
+                <h3>Market Barriers</h3>
+                <ul>
+                    <li><strong>Installer shortage:</strong> 60K certified installers needed by 2030 vs 15K today. Labor bottleneck constrains growth</li>
+                    <li><strong>High upfront cost:</strong> Heat pump + solar: €25-35K. Subsidy programs (BAFA) reduce to €15-20K but complex paperwork</li>
+                    <li><strong>Fragmented market:</strong> 5,000+ regional HVAC companies. M&A consolidation expensive (€2-5M per acquisition)</li>
+                    <li><strong>Customer hesitation:</strong> Gas boiler incumbency. Payback period: 8-12 years. Requires customer education</li>
+                </ul>
+                <div class="insight-box warning">
+                    <strong>Execution Risk:</strong> Capital-intensive model (M&A + inventory). Burn rate €50M+/year. Need to prove unit economics (€5K gross profit/installation) while scaling to 50K+ installations/year for profitability.
+                </div>
+            </div>
+        </div>
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Market Analysis</h2>
+                <table>
+                    <tr>
+                        <th>Player</th>
+                        <th>Model</th>
+                        <th>Scale</th>
+                        <th>Strength</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1KOMMA5°</strong></td>
+                        <td>Vertical integration + software</td>
+                        <td>10K installations</td>
+                        <td>VC-backed scale, tech layer</td>
+                    </tr>
+                    <tr>
+                        <td>Thermondo</td>
+                        <td>Heat pump focus</td>
+                        <td>15K installations</td>
+                        <td>Market leader, brand awareness</td>
+                    </tr>
+                    <tr>
+                        <td>Enpal</td>
+                        <td>Solar-as-a-service</td>
+                        <td>50K customers</td>
+                        <td>No upfront cost model (lease)</td>
+                    </tr>
+                    <tr>
+                        <td>Regional Installers</td>
+                        <td>Traditional HVAC</td>
+                        <td>5,000+ companies</td>
+                        <td>Local relationships, trust</td>
+                    </tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Growth Strategy</h2>
+                <h3>Three-Pillar Model</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">1. Installation Revenue</div>
+                        <div class="metric-value">€20-30K</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Per customer (heat pump + solar). €5K gross profit. Target: 50K installations/year by 2026</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">2. Energy Management SaaS</div>
+                        <div class="metric-value">€15/mo</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Heartbeat software optimizes energy use. 70% margin. Recurring revenue = valuation driver</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">3. Energy Trading</div>
+                        <div class="metric-value">€200/yr</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Virtual power plant: aggregate customer batteries, sell grid services. Future revenue stream</div>
+                    </div>
+                </div>
+                <h3>M&A Consolidation Strategy</h3>
+                <table>
+                    <tr>
+                        <th>Acquisition Type</th>
+                        <th>Rationale</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td>Regional HVAC Installer</td>
+                        <td>Instant installer capacity, local brand</td>
+                        <td>€2-5M per company (50+ acquired)</td>
+                    </tr>
+                    <tr>
+                        <td>Solar Installer</td>
+                        <td>Cross-sell heat pumps to solar customers</td>
+                        <td>€3-8M (fewer targets, higher multiples)</td>
+                    </tr>
+                    <tr>
+                        <td>Software/Energy Mgmt</td>
+                        <td>Build Heartbeat platform capabilities</td>
+                        <td>€5-15M (tech talent, IP)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                <div class="insight-box success">
+                    <strong>🎯 Timing = Market Opportunity:</strong> Germany banned new gas boilers by 2024. EU Fit for 55 mandate drives heat pump adoption. Tailwind: energy crisis (2022) made fossil fuel heating expensive. Market growing 40% CAGR.
+                </div>
+                <div class="insight-box">
+                    <strong>💰 Unit Economics Challenge:</strong> €20K installation revenue, €5K gross profit, €3K CAC = €2K net/customer. Need 50K installations/year for profitability. Currently 10K = path requires 5x scale.
+                </div>
+                <div class="insight-box warning">
+                    <strong>🔧 Installer Shortage = Bottleneck:</strong> Training pipeline: 6-12 months per installer. 1KOMMA5° training academy addresses but can't scale fast enough. Labor costs rising 15% YoY.
+                </div>
+                <div class="insight-box success">
+                    <strong>📊 Software Layer = Differentiation:</strong> Heartbeat platform optimizes when to charge battery (cheap grid electricity), when to use solar, when to heat water. Saves customer €500-800/year → justifies SaaS fee.
+                </div>
+            </div>
+        </div>
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+                <h3>1. Accelerate Installer Training</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> Labor is bottleneck. Build 1KOMMA5° Academy to 2,000 graduates/year (vs 500 today).</p>
+                    <ul>
+                        <li>Partner with vocational schools (dual program)</li>
+                        <li>Offer €50K salary + equity to attract talent</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> Unlock 50K installations/year capacity</p>
+                </div>
+                <h3>2. Launch Subscription Model</h3>
+                <div class="card" style="background: rgba(59, 130, 246, 0.1);">
+                    <p><strong>Rationale:</strong> €25K upfront too high. Copy Enpal's lease model: €0 down, €150/month.</p>
+                    <ul>
+                        <li>Reduces customer friction, increases conversion 3x</li>
+                        <li>Predictable recurring revenue (20-year contracts)</li>
+                    </ul>
+                    <p style="color: #3b82f6; margin-top: 15px;"><strong>Impact:</strong> €300M ARR from subscriptions alone</p>
+                </div>
+                <h3>3. B2B Commercial Real Estate</h3>
+                <div class="card" style="background: rgba(245, 158, 11, 0.1);">
+                    <p><strong>Rationale:</strong> Residential CAC high (€3K). Commercial buildings: larger deals, lower CAC.</p>
+                    <ul>
+                        <li>Target apartment buildings (50-200 units)</li>
+                        <li>€500K-2M contracts, €150K gross profit each</li>
+                    </ul>
+                    <p style="color: #f59e0b; margin-top: 15px;"><strong>Impact:</strong> €100M ARR, better unit economics</p>
+                </div>
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;"><strong>Takeaway:</strong> 1KOMMA5° well-positioned for Germany's energy transition but faces execution challenges: installer shortage, capital intensity, unit economics. Success factors: (1) Scale to 50K installations/year for profitability, (2) Subscription model reduces CAC payback, (3) Software layer (Heartbeat) creates recurring revenue moat. Key risk: burn rate (€50M+/year) requires additional funding if growth slows. Competitive advantage: first-mover in vertical integration (installation + software), but Thermondo, Enpal can copy model.</p>
+                </div>
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        const green = '#10b981', blue = '#3b82f6', orange = '#f59e0b';
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: { labels: ['TAM (Germany)', 'SAM (Residential)', 'SOM (2025 Target)'], datasets: [{ label: 'Market Size (€B)', data: [50, 20, 0.5], backgroundColor: [green, blue, orange] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Heat Pump & Solar Market Opportunity', color: '#e8e8e8' } }, scales: { y: { ticks: { color: '#e8e8e8' } }, x: { ticks: { color: '#e8e8e8' } } } }
+        });
+    </script>
+</body>
+</html>

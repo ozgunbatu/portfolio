@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celonis Case Study | Process Mining Market Leadership</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', 'Arial', sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; line-height: 1.7; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%); color: white; padding: 70px 40px; text-align: center; margin-bottom: 45px; border-radius: 12px; box-shadow: 0 15px 50px rgba(99, 102, 241, 0.3); position: relative; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #6366f1, #ffffff, #6366f1); }
+        h1 { font-size: 3em; margin-bottom: 18px; font-weight: 300; }
+        .subtitle { font-size: 1.25em; opacity: 0.95; font-weight: 300; }
+        .author-info { margin-top: 22px; font-size: 0.95em; opacity: 0.85; }
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center; }
+        .tab-button { padding: 14px 28px; background: rgba(99, 102, 241, 0.15); border: 2px solid rgba(99, 102, 241, 0.4); border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 500; transition: all 0.3s; color: #6366f1; }
+        .tab-button:hover { border-color: #6366f1; background: rgba(99, 102, 241, 0.25); transform: translateY(-2px); }
+        .tab-button.active { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(26, 31, 46, 0.6) 100%); padding: 38px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 6px 25px rgba(0,0,0,0.3); border: 1px solid rgba(99, 102, 241, 0.2); transition: all 0.3s; }
+        .card:hover { transform: translateY(-6px); }
+        h2 { color: #6366f1; margin-bottom: 22px; font-size: 2em; font-weight: 400; padding-bottom: 12px; border-bottom: 3px solid rgba(99, 102, 241, 0.3); }
+        h3 { color: #818cf8; margin: 28px 0 18px 0; font-size: 1.4em; font-weight: 500; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; margin: 32px 0; }
+        .metric-card { background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(26, 31, 46, 0.5) 100%); padding: 28px; border-radius: 10px; border-left: 4px solid #6366f1; transition: all 0.3s; }
+        .metric-card:hover { transform: scale(1.03); }
+        .metric-label { font-size: 0.9em; color: #a8b5c0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .metric-value { font-size: 2.3em; font-weight: 300; color: #6366f1; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 28px 0; border-radius: 10px; overflow: hidden; }
+        th { background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(79, 70, 229, 0.3) 100%); padding: 18px; text-align: left; font-weight: 500; color: #6366f1; }
+        td { padding: 16px 18px; background: rgba(26, 31, 46, 0.4); border-bottom: 1px solid rgba(99, 102, 241, 0.1); }
+        tr:hover td { background: rgba(99, 102, 241, 0.08); }
+        .insight-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%); padding: 28px; border-radius: 10px; border-left: 5px solid #f59e0b; margin: 28px 0; line-height: 1.8; }
+        .insight-box.success { border-left-color: #10b981; }
+        .chart-container { background: rgba(26, 31, 46, 0.6); padding: 30px; border-radius: 12px; margin: 28px 0; min-height: 350px; }
+        ul { line-height: 1.9; margin: 18px 0; padding-left: 25px; }
+        li { margin: 10px 0; color: #a8b5c0; }
+        strong { color: #e8e8e8; }
+        .back-button { display: inline-block; padding: 12px 28px; background: rgba(99, 102, 241, 0.15); border: 2px solid rgba(99, 102, 241, 0.4); border-radius: 8px; color: #6366f1; text-decoration: none; font-weight: 500; margin-top: 35px; transition: all 0.3s; }
+        .back-button:hover { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; }
+        @media (max-width: 768px) { h1 { font-size: 2.2em; } .metric-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Celonis</h1>
+            <p class="subtitle">Process Mining Market Leadership & Category Creation</p>
+            <p class="author-info">Strategic Analysis by Özgün Batuhan Dogan | Munich, Germany</p>
+        </header>
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('challenge')">Challenge</button>
+            <button class="tab-button" onclick="showTab('analysis')">Analysis</button>
+            <button class="tab-button" onclick="showTab('strategy')">Strategy</button>
+            <button class="tab-button" onclick="showTab('insights')">Insights</button>
+            <button class="tab-button" onclick="showTab('recommendations')">Recommendations</button>
+        </div>
+        <div id="overview" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Munich-based Celonis created €13B process intelligence category by visualizing actual business processes from system logs—helping enterprises (Siemens, Uber, Coca-Cola) identify inefficiencies worth $1T+ globally through data-driven process optimization.</p>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Valuation</div>
+                        <div class="metric-value">€13B</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Series D (2021)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">ARR</div>
+                        <div class="metric-value">€500M+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">2023 Estimate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Customers</div>
+                        <div class="metric-value">5,000+</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Including 50% Fortune 500</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Category Leadership</div>
+                        <div class="metric-value">50%</div>
+                        <div style="font-size: 0.85em; color: #a8b5c0;">Process Mining Market Share</div>
+                    </div>
+                </div>
+                <div class="insight-box success">
+                    <strong>Technology:</strong> Connects to SAP/Oracle/Salesforce logs, reconstructs actual process flows (e.g., "order-to-cash"), identifies bottlenecks. Example: Siemens saved €1B by fixing procurement inefficiencies Celonis revealed in SAP data.
+                </div>
+            </div>
+        </div>
+        <div id="challenge" class="content-section">
+            <div class="card">
+                <h2>Strategic Challenge</h2>
+                <p style="font-size: 1.15em; line-height: 1.8; margin: 20px 0;">Can Celonis educate market on new category (process mining), sell €1M+ deals to CFOs/COOs who don't budget for it, prove ROI fast enough to avoid churn—while defending against SAP/IBM/Microsoft building competitive features?</p>
+                <h3>Market Creation Challenges</h3>
+                <ul>
+                    <li><strong>Category education:</strong> "Process mining" unknown in 2016. Sales cycles: 12-18 months explaining value prop</li>
+                    <li><strong>High ACV pressure:</strong> €500K-5M deals = CFO approval required. Must prove 10x ROI in Year 1</li>
+                    <li><strong>SAP dependency risk:</strong> 70% customers use Celonis for SAP. If SAP integrates natively, business model threatened</li>
+                    <li><strong>Talent scarcity:</strong> Need data scientists who understand both process optimization + enterprise IT. Hiring bottleneck</li>
+                </ul>
+                <div class="insight-box warning">
+                    <strong>Competitive Threat:</strong> SAP Signavio (acquired 2021), Microsoft Process Advisor, IBM Process Mining all launched. Incumbents bundle for free with ERP. Celonis must differentiate beyond features.
+                </div>
+            </div>
+        </div>
+        <div id="analysis" class="content-section">
+            <div class="card">
+                <h2>Competitive Landscape</h2>
+                <table>
+                    <tr>
+                        <th>Player</th>
+                        <th>Strength</th>
+                        <th>Pricing</th>
+                        <th>Market Share</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Celonis</strong></td>
+                        <td>Best-in-class tech, process intelligence layer</td>
+                        <td>€500K-5M/year</td>
+                        <td style="color: #10b981;">50%</td>
+                    </tr>
+                    <tr>
+                        <td>SAP Signavio</td>
+                        <td>SAP integration, bundled pricing</td>
+                        <td>€200K-1M/year</td>
+                        <td>20%</td>
+                    </tr>
+                    <tr>
+                        <td>UiPath Process Mining</td>
+                        <td>RPA integration, automation focus</td>
+                        <td>€300K-2M/year</td>
+                        <td>15%</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft Process Advisor</td>
+                        <td>Power Platform bundle, SMB focus</td>
+                        <td>Included in E5</td>
+                        <td>10%</td>
+                    </tr>
+                </table>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="strategy" class="content-section">
+            <div class="card">
+                <h2>Go-to-Market Strategy</h2>
+                <h3>Enterprise Sales Model</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Average Deal Size</div>
+                        <div class="metric-value">€1.2M</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Initial contract (Year 1)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Sales Cycle</div>
+                        <div class="metric-value">9-12mo</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">POC → Pilot → Enterprise</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">NRR</div>
+                        <div class="metric-value">130%</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Expansion drives growth</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Customer LTV</div>
+                        <div class="metric-value">€10M+</div>
+                        <div style="font-size: 0.9em; color: #a8b5c0;">Multi-year, multi-process</div>
+                    </div>
+                </div>
+                <h3>Land-and-Expand Playbook</h3>
+                <table>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Scope</th>
+                        <th>ACV</th>
+                    </tr>
+                    <tr>
+                        <td><strong>POC (3 months)</strong></td>
+                        <td>Single process (e.g., Order-to-Cash in 1 region)</td>
+                        <td>€100K</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pilot (6 months)</strong></td>
+                        <td>1 process, 3 regions. Prove €5M savings</td>
+                        <td>€500K</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Department (Year 2)</strong></td>
+                        <td>3 processes (O2C, P2P, Logistics)</td>
+                        <td>€1.5M</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enterprise (Year 3+)</strong></td>
+                        <td>All processes, global rollout, process intelligence platform</td>
+                        <td>€5M+</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="insights" class="content-section">
+            <div class="card">
+                <h2>Strategic Insights</h2>
+                <div class="insight-box success">
+                    <strong>🎯 Category Creation = First-Mover Moat:</strong> Celonis defined "process mining" category. Gartner Magic Quadrant leader 5 years running. Competitors copy features but can't replicate brand = thought leadership.
+                </div>
+                <div class="insight-box">
+                    <strong>💰 ROI Proof = Sales Weapon:</strong> Average customer finds €10M+ in savings Year 1. ROI 10-20x. Siemens case study (€1B saved) closes every Fortune 500 deal. CFOs budget from savings, not IT.
+                </div>
+                <div class="insight-box success">
+                    <strong>📊 Data Network Effects:</strong> More customers → more process benchmarks → better recommendations. Celonis Process Intelligence knows "best-in-class" metrics across industries. SAP can't replicate without customer base.
+                </div>
+                <div class="insight-box warning">
+                    <strong>⚠️ SAP Risk Mitigated:</strong> SAP Signavio acquisition scary, but Celonis diversified: 30% non-SAP systems (Oracle, Salesforce), vertical solutions (manufacturing, healthcare), process intelligence layer SAP doesn't have.
+                </div>
+            </div>
+        </div>
+        <div id="recommendations" class="content-section">
+            <div class="card">
+                <h2>Strategic Recommendations</h2>
+                <h3>1. Process Intelligence Platform</h3>
+                <div class="card" style="background: rgba(16, 185, 129, 0.1);">
+                    <p><strong>Rationale:</strong> Evolve from process mining tool to platform. Add execution layer (automation, workflows).</p>
+                    <ul>
+                        <li>Integrate RPA (partner with UiPath/Automation Anywhere)</li>
+                        <li>Close loop: identify inefficiency → automate fix</li>
+                    </ul>
+                    <p style="color: #10b981; margin-top: 15px;"><strong>Impact:</strong> 3x ACV, platform lock-in, defend vs SAP</p>
+                </div>
+                <h3>2. Vertical Solutions (Manufacturing, Healthcare)</h3>
+                <div class="card" style="background: rgba(245, 158, 11, 0.1);">
+                    <p><strong>Rationale:</strong> Generic process mining = commoditized. Vertical-specific = premium pricing.</p>
+                    <ul>
+                        <li>Manufacturing: supply chain, quality control templates</li>
+                        <li>Healthcare: patient flow, revenue cycle optimization</li>
+                    </ul>
+                    <p style="color: #f59e0b; margin-top: 15px;"><strong>Impact:</strong> +50% win rate in verticals, 2x pricing power</p>
+                </div>
+                <h3>3. SMB Market with Product-Led Growth</h3>
+                <div class="card" style="background: rgba(59, 130, 246, 0.1);">
+                    <p><strong>Rationale:</strong> Enterprise sales expensive (€500K CAC). Launch freemium for 100-1,000 employee companies.</p>
+                    <ul>
+                        <li>Free tier: 1 process, limited data</li>
+                        <li>€10K/year Pro tier vs €1M+ enterprise</li>
+                    </ul>
+                    <p style="color: #3b82f6; margin-top: 15px;"><strong>Impact:</strong> €100M ARR from SMB, land accounts for upsell</p>
+                </div>
+                <div class="insight-box success">
+                    <p style="font-size: 1.1em;"><strong>Takeaway:</strong> Celonis successfully created €13B category from zero. Competitive moats: (1) Category leadership/brand, (2) Data network effects (process benchmarks), (3) Customer ROI proof (10-20x). SAP Signavio threat manageable via differentiation: process intelligence layer, non-SAP systems, vertical solutions. Path to €1B ARR: expand wallet share (POC → Enterprise), vertical solutions (premium pricing), SMB PLG (volume). Key risk: commoditization if features easily replicated—must stay 2+ years ahead on innovation.</p>
+                </div>
+                <a href="startup_portfolio.html" class="back-button">← Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        const indigo = '#6366f1', green = '#10b981', orange = '#f59e0b';
+        new Chart(document.getElementById('marketChart'), {
+            type: 'bar',
+            data: { labels: ['Celonis', 'SAP Signavio', 'UiPath', 'Microsoft', 'Others'], datasets: [{ label: 'Market Share (%)', data: [50, 20, 15, 10, 5], backgroundColor: [indigo, '#4f46e5', green, orange, '#6b7280'] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Process Mining Market Share', color: '#e8e8e8' } }, scales: { y: { ticks: { color: '#e8e8e8' } }, x: { ticks: { color: '#e8e8e8' } } } }
+        });
+    </script>
+</body>
+</html>
