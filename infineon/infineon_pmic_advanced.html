@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infineon PMIC Strategy - Advanced Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --infineon-red: #e30613;
+            --infineon-dark: #1a1a1a;
+            --infineon-gray: #4a4a4a;
+            --infineon-light: #f5f5f5;
+            --accent-blue: #0066cc;
+            --accent-green: #00a651;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            color: var(--infineon-dark);
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--infineon-red) 0%, #b30510 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(227, 6, 19, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .header-left h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header-left p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .header-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .header-metric {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .header-metric-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .header-metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-12 { grid-column: span 12; }
+        .card-8 { grid-column: span 8; }
+        .card-6 { grid-column: span 6; }
+        .card-4 { grid-column: span 4; }
+        .card-3 { grid-column: span 3; }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--infineon-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--infineon-red);
+        }
+        
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, var(--infineon-light) 0%, #ffffff 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--infineon-red);
+            transition: all 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: scale(1.05);
+            border-left-color: var(--accent-blue);
+        }
+        
+        .kpi-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--infineon-red);
+            margin-bottom: 5px;
+        }
+        
+        .kpi-label {
+            font-size: 0.9em;
+            color: var(--infineon-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .kpi-change {
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        
+        .kpi-change.positive { color: var(--accent-green); }
+        .kpi-change.negative { color: #d32f2f; }
+        
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-top: 20px;
+        }
+        
+        .chart-container-large {
+            height: 450px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, var(--infineon-dark) 0%, var(--infineon-gray) 100%);
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tbody tr:hover {
+            background: var(--infineon-light);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--infineon-gray);
+        }
+        
+        .tab-btn:hover {
+            border-color: var(--infineon-red);
+            color: var(--infineon-red);
+        }
+        
+        .tab-btn.active {
+            background: var(--infineon-red);
+            color: white;
+            border-color: var(--infineon-red);
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Insights */
+        .insight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .insight-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left-color: var(--accent-green);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            margin-top: 30px;
+            color: var(--infineon-gray);
+        }
+        
+        .infineon-logo {
+            font-weight: 700;
+            color: var(--infineon-red);
+            font-size: 1.2em;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .card-8, .card-6, .card-4, .card-3 { grid-column: span 12; }
+            .header-metrics { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🔋 PMIC Product Strategy Dashboard</h1>
+                    <p>800V EV Architecture Market Analysis & Financial Modeling</p>
+                    <p style="opacity: 0.8; margin-top: 5px; font-size: 0.95em;">Infineon Technologies | Automotive Power Management</p>
+                </div>
+                <div class="header-metrics">
+                    <div class="header-metric">
+                        <div class="header-metric-value">$24.4B</div>
+                        <div class="header-metric-label">Market Size 2034</div>
+                    </div>
+                    <div class="header-metric">
+                        <div class="header-metric-value">21.3%</div>
+                        <div class="header-metric-label">CAGR 2024-34</div>
+                    </div>
+                    <div class="header-metric">
+                        <div class="header-metric-value">€980M</div>
+                        <div class="header-metric-label">3Y EBITDA Target</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Overview -->
+        <div class="card card-12">
+            <h2 class="card-title">📊 Executive KPI Dashboard</h2>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">13.5%</div>
+                    <div class="kpi-label">Market Share</div>
+                    <div class="kpi-change positive">↑ #1 in Premium Segment</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">€1.52B</div>
+                    <div class="kpi-label">2025 Revenue Target</div>
+                    <div class="kpi-change positive">↑ 23% YoY Growth</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">+18%</div>
+                    <div class="kpi-label">ASP Increase</div>
+                    <div class="kpi-change positive">Value-Based Pricing</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">€325</div>
+                    <div class="kpi-label">Target ASP</div>
+                    <div class="kpi-change positive">From €275 Current</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">15</div>
+                    <div class="kpi-label">Design Wins Target</div>
+                    <div class="kpi-change positive">800V Platforms</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">36.5%</div>
+                    <div class="kpi-label">Gross Margin</div>
+                    <div class="kpi-change positive">↑ 4.5pp Expansion</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('market')">Market Analysis</button>
+            <button class="tab-btn" onclick="showTab('financial')">Financial Model</button>
+            <button class="tab-btn" onclick="showTab('pricing')">Pricing Strategy</button>
+            <button class="tab-btn" onclick="showTab('roadmap')">GTM Roadmap</button>
+        </div>
+
+        <!-- Tab: Market Analysis -->
+        <div id="market" class="tab-content active">
+            <div class="dashboard">
+                <div class="card card-8">
+                    <h2 class="card-title">Market Growth Trajectory</h2>
+                    <div class="chart-container chart-container-large">
+                        <canvas id="marketGrowthChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card card-4">
+                    <h2 class="card-title">Regional Split 2025</h2>
+                    <div class="chart-container">
+                        <canvas id="regionalChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card card-6">
+                    <h2 class="card-title">Competitive Landscape</h2>
+                    <div class="chart-container">
+                        <canvas id="competitiveChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card card-6">
+                    <h2 class="card-title">Technology Adoption Curve</h2>
+                    <div class="chart-container">
+                        <canvas id="adoptionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card card-12">
+                <h2 class="card-title">Market Drivers & Trends</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Driver</th>
+                            <th>Impact</th>
+                            <th>2024 Status</th>
+                            <th>2027 Projection</th>
+                            <th>Infineon Opportunity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>800V Platform Adoption</strong></td>
+                            <td style="color: var(--accent-green); font-weight: 700;">Very High</td>
+                            <td>15% of new EVs</td>
+                            <td>38% of new EVs</td>
+                            <td>CoolSiC™ technology leadership, premium pricing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ultra-Fast Charging</strong></td>
+                            <td style="color: var(--accent-green); font-weight: 700;">High</td>
+                            <td>350kW chargers limited</td>
+                            <td>800kW+ standard</td>
+                            <td>Enabling technology for 10-80% in 18 min charging</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Range Extension Demand</strong></td>
+                            <td style="color: var(--accent-green); font-weight: 700;">High</td>
+                            <td>420km avg range</td>
+                            <td>600km+ expected</td>
+                            <td>SiC efficiency gains enable 6% range improvement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EU Green Deal</strong></td>
+                            <td style="color: #ff9800; font-weight: 700;">Medium</td>
+                            <td>2030 55% CO2 reduction</td>
+                            <td>Regulatory acceleration</td>
+                            <td>Policy tailwind for EV adoption = PMIC demand</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Financial Model -->
+        <div id="financial" class="tab-content">
+            <div class="dashboard">
+                <div class="card card-8">
+                    <h2 class="card-title">3-Year Revenue & Margin Projection</h2>
+                    <div class="chart-container chart-container-large">
+                        <canvas id="financialChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card card-4">
+                    <h2 class="card-title">Revenue Bridge 2024-27</h2>
+                    <div class="chart-container">
+                        <canvas id="bridgeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card card-12">
+                <h2 class="card-title">Financial Model - P&L Projection</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric (€M)</th>
+                            <th>2024 Baseline</th>
+                            <th>2025 Target</th>
+                            <th>2026 Projection</th>
+                            <th>2027 Goal</th>
+                            <th>3Y Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>Revenue</strong></td>
+                            <td>€1,240</td>
+                            <td>€1,520</td>
+                            <td>€1,840</td>
+                            <td>€2,180</td>
+                            <td style="color: var(--accent-green); font-weight: 700;">+76%</td>
+                        </tr>
+                        <tr>
+                            <td>Unit Volume (K)</td>
+                            <td>4,495</td>
+                            <td>4,965</td>
+                            <td>5,520</td>
+                            <td>6,154</td>
+                            <td style="color: var(--accent-green);">+37%</td>
+                        </tr>
+                        <tr>
+                            <td>ASP (€)</td>
+                            <td>276</td>
+                            <td>306</td>
+                            <td>333</td>
+                            <td>354</td>
+                            <td style="color: var(--accent-green);">+28%</td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td><strong>Gross Profit</strong></td>
+                            <td>€397</td>
+                            <td>€555</td>
+                            <td>€714</td>
+                            <td>€877</td>
+                            <td style="color: var(--accent-green); font-weight: 700;">+121%</td>
+                        </tr>
+                        <tr>
+                            <td>Gross Margin %</td>
+                            <td>32.0%</td>
+                            <td>36.5%</td>
+                            <td>38.8%</td>
+                            <td>40.2%</td>
+                            <td style="color: var(--accent-green);">+8.2pp</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OpEx</strong></td>
+                            <td>€186</td>
+                            <td>€228</td>
+                            <td>€257</td>
+                            <td>€283</td>
+                            <td>+€97</td>
+                        </tr>
+                        <tr style="background: #e3f2fd;">
+                            <td><strong>EBITDA</strong></td>
+                            <td>€211</td>
+                            <td>€327</td>
+                            <td>€457</td>
+                            <td>€594</td>
+                            <td style="color: var(--accent-green); font-weight: 700;">+181%</td>
+                        </tr>
+                        <tr>
+                            <td>EBITDA Margin %</td>
+                            <td>17.0%</td>
+                            <td>21.5%</td>
+                            <td>24.8%</td>
+                            <td>27.2%</td>
+                            <td style="color: var(--accent-green);">+10.2pp</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="insight insight-success">
+                    <strong>💰 Value Creation:</strong> 3-year plan delivers €980M incremental EBITDA (€594M - €211M baseline x 3 years) through:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Volume growth (+37%): Neue Klasse platform ramp, design wins with VW/GM/Ford</li>
+                        <li>ASP expansion (+28%): Value-based pricing capturing 25% of €2,444 customer value</li>
+                        <li>Margin expansion (+8.2pp): Austria fab scale, SiC cost reductions, premium mix shift</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Pricing Strategy -->
+        <div id="pricing" class="tab-content">
+            <div class="dashboard">
+                <div class="card card-6">
+                    <h2 class="card-title">Value-Based Pricing Framework</h2>
+                    <div class="chart-container">
+                        <canvas id="valuePricingChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card card-6">
+                    <h2 class="card-title">Competitive Pricing Position</h2>
+                    <div class="chart-container">
+                        <canvas id="competitivePricingChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card card-12">
+                <h2 class="card-title">Total Economic Value (TEV) Analysis</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Value Driver</th>
+                            <th>Customer Benefit</th>
+                            <th>Quantification Method</th>
+                            <th>Value per Vehicle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Efficiency Gain (6%)</strong></td>
+                            <td>Extended range → smaller/cheaper battery</td>
+                            <td>6% range = 6 kWh less battery x €200/kWh</td>
+                            <td style="background: #e8f5e9; font-weight: 700;">€1,200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fast Charging Speed</strong></td>
+                            <td>10-80% in 18 min vs 28 min (Si IGBT)</td>
+                            <td>Customer time value + charging network premium pricing</td>
+                            <td style="background: #e8f5e9; font-weight: 700;">€900</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Weight Reduction</strong></td>
+                            <td>50% lighter cables (12 kg savings)</td>
+                            <td>12 kg x €8/kg (vehicle weight cost)</td>
+                            <td style="background: #e8f5e9; font-weight: 700;">€96</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Thermal Management</strong></td>
+                            <td>Smaller/cheaper cooling system</td>
+                            <td>Reduced radiator, coolant, piping costs</td>
+                            <td style="background: #e8f5e9; font-weight: 700;">€180</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reliability & Warranty</strong></td>
+                            <td>Lower failure rate (SiC robustness)</td>
+                            <td>Warranty cost reduction + brand reputation</td>
+                            <td style="background: #e8f5e9; font-weight: 700;">€68</td>
+                        </tr>
+                        <tr style="background: #c8e6c9;">
+                            <td colspan="3"><strong>Total Economic Value Created</strong></td>
+                            <td style="font-size: 1.3em; font-weight: 700; color: var(--accent-green);">€2,444</td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td colspan="3"><strong>Current Infineon Premium (€143 ASP delta vs Si IGBT)</strong></td>
+                            <td style="font-weight: 700;">€143 (6%)</td>
+                        </tr>
+                        <tr style="background: #ffecb3;">
+                            <td colspan="3"><strong>Recommended Premium (25% value capture)</strong></td>
+                            <td style="font-weight: 700; color: var(--infineon-red);">€611 (25%)</td>
+                        </tr>
+                        <tr style="background: #e3f2fd;">
+                            <td colspan="3"><strong>Customer Net Benefit (75% value retained)</strong></td>
+                            <td style="font-weight: 700; color: var(--accent-blue);">€1,833</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="insight">
+                    <strong>🎯 Pricing Insight:</strong> Current pricing captures only 6% of total customer value created. Increasing ASP by 18% (€275 → €325) still leaves customers with 75% of value (€1,833 net benefit), making it a highly attractive value proposition while unlocking €216M annual revenue uplift.
+                </div>
+            </div>
+            
+            <div class="card card-12">
+                <h2 class="card-title">Segment-Specific Pricing Strategy</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer Segment</th>
+                            <th>Current ASP</th>
+                            <th>Target ASP</th>
+                            <th>% Increase</th>
+                            <th>Rationale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Premium OEM (Porsche, BMW)</strong></td>
+                            <td>€285</td>
+                            <td>€340</td>
+                            <td style="color: var(--accent-green); font-weight: 700;">+19%</td>
+                            <td>Technology leadership, brand alignment, performance focus</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Volume OEM (VW, GM, Ford)</strong></td>
+                            <td>€275</td>
+                            <td>€320</td>
+                            <td style="color: var(--accent-green); font-weight: 700;">+16%</td>
+                            <td>TCO advantage, platform standardization, volume commitment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chinese OEM (BYD, NIO)</strong></td>
+                            <td>€265</td>
+                            <td>€285</td>
+                            <td style="color: #ff9800; font-weight: 700;">+8%</td>
+                            <td>Competitive intensity, lower willingness-to-pay, strategic foothold</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tier-1 Suppliers</strong></td>
+                            <td>€280</td>
+                            <td>€330</td>
+                            <td style="color: var(--accent-green); font-weight: 700;">+18%</td>
+                            <td>Value-add partnerships, co-development, ecosystem leverage</td>
+                        </tr>
+                        <tr style="background: #e3f2fd;">
+                            <td><strong>Blended Average</strong></td>
+                            <td><strong>€275</strong></td>
+                            <td><strong>€325</strong></td>
+                            <td style="color: var(--infineon-red); font-weight: 700;"><strong>+18%</strong></td>
+                            <td><strong>€216M incremental annual revenue</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: GTM Roadmap -->
+        <div id="roadmap" class="tab-content">
+            <div class="card card-12">
+                <h2 class="card-title">2025 Go-to-Market Roadmap</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Quarter</th>
+                            <th>Strategic Initiatives</th>
+                            <th>Key Milestones</th>
+                            <th>Revenue Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>Q1 2025</strong></td>
+                            <td>
+                                • 800V Task Force launch (15 members)<br>
+                                • TCO calculator deployment (sales enablement)<br>
+                                • Premium OEM engagement (BMW, Hyundai)<br>
+                                • Pricing governance implementation
+                            </td>
+                            <td>
+                                • 3 design win targets engaged<br>
+                                • €10M pipeline created<br>
+                                • Pricing approved by exec team<br>
+                                • 100 sales team trained
+                            </td>
+                            <td>€380M</td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td><strong>Q2 2025</strong></td>
+                            <td>
+                                • Volume OEM blitz (VW, GM, Ford)<br>
+                                • TSJ technology preview events<br>
+                                • Digital marketing campaign launch<br>
+                                • Austria fab capacity milestone
+                            </td>
+                            <td>
+                                • 6 RFPs submitted<br>
+                                • 2 design wins closed<br>
+                                • 500+ LinkedIn engagements<br>
+                                • 30% capacity expansion online
+                            </td>
+                            <td>€385M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Q3 2025</strong></td>
+                            <td>
+                                • Chinese OEM market entry (selective)<br>
+                                • PCIM Europe participation<br>
+                                • Tier-1 co-development kickoffs<br>
+                                • Mid-year business review
+                            </td>
+                            <td>
+                                • BYD PoC agreement<br>
+                                • 200 trade show leads<br>
+                                • 3 Tier-1 partnerships signed<br>
+                                • H1 results: €765M revenue
+                            </td>
+                            <td>€375M</td>
+                        </tr>
+                        <tr style="background: #e3f2fd;">
+                            <td><strong>Q4 2025</strong></td>
+                            <td>
+                                • Neue Klasse production ramp support<br>
+                                • 2026 planning & capacity allocation<br>
+                                • Customer success reviews (top 20)<br>
+                                • Year-end pipeline build
+                            </td>
+                            <td>
+                                • 15 total design wins (annual target)<br>
+                                • €1.52B annual revenue achieved<br>
+                                • 2026 €420M pipeline<br>
+                                • 36.5% gross margin
+                            </td>
+                            <td>€380M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="dashboard">
+                <div class="card card-6">
+                    <h2 class="card-title">Design Win Pipeline</h2>
+                    <div class="chart-container">
+                        <canvas id="pipelineChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card card-6">
+                    <h2 class="card-title">Revenue by Channel 2025</h2>
+                    <div class="chart-container">
+                        <canvas id="channelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="insight insight-success">
+                <strong>🎯 Implementation Success Factors:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Cross-Functional Alignment:</strong> 800V Task Force with Sales, Product, Engineering, Operations representation</li>
+                    <li><strong>Customer Intimacy:</strong> Quarterly business reviews with top 20 accounts, dedicated FAE resources</li>
+                    <li><strong>Market Timing:</strong> Neue Klasse launch (Q4 2025) creates pull-through demand for CoolSiC™</li>
+                    <li><strong>Operational Readiness:</strong> Austria fab expansion ensures supply confidence for design wins</li>
+                    <li><strong>Continuous Improvement:</strong> Monthly GTM reviews, agile pivots based on win/loss analysis</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p class="infineon-logo">INFINEON TECHNOLOGIES</p>
+            <p style="margin-top: 10px;">PMIC Product Strategy Dashboard | Advanced Analytics & Financial Modeling</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Created for product management & business development portfolio | February 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Infineon brand colors
+        const infRed = '#e30613';
+        const infDark = '#1a1a1a';
+        const accentBlue = '#0066cc';
+        const accentGreen = '#00a651';
+        const accentOrange = '#ff9800';
+
+        // Market Growth Chart
+        new Chart(document.getElementById('marketGrowthChart'), {
+            type: 'line',
+            data: {
+                labels: ['2024', '2025', '2026', '2027', '2028', '2029', '2030', '2034'],
+                datasets: [{
+                    label: '800V EV Market ($B)',
+                    data: [3.45, 4.8, 6.5, 8.9, 11.8, 15.2, 18.4, 24.4],
+                    borderColor: infRed,
+                    backgroundColor: 'rgba(227, 6, 19, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Infineon Revenue (€M)',
+                    data: [466, 648, 877, 1202, 1593, 2053, 2485, 3294],
+                    borderColor: accentGreen,
+                    backgroundColor: 'rgba(0, 166, 81, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: '800V Market Growth & Infineon Revenue Projection', font: { size: 16, weight: '700' } }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Regional Chart
+        new Chart(document.getElementById('regionalChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['APAC', 'North America', 'Europe', 'China', 'Rest of World'],
+                datasets: [{
+                    data: [43, 29, 21, 5, 2],
+                    backgroundColor: [infRed, accentBlue, accentGreen, accentOrange, '#9e9e9e']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'PMIC Market by Region (%)', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+
+        // Competitive Chart
+        new Chart(document.getElementById('competitiveChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Infineon', 'TI', 'ST', 'ON Semi', 'Renesas', 'ADI'],
+                datasets: [{
+                    label: 'Market Share (%)',
+                    data: [13.5, 12.8, 11.2, 10.6, 9.8, 7.9],
+                    backgroundColor: [infRed, '#757575', '#757575', '#757575', '#757575', '#757575']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Automotive Power Semiconductor Market Share', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+
+        // Adoption Chart
+        new Chart(document.getElementById('adoptionChart'), {
+            type: 'line',
+            data: {
+                labels: ['2023', '2024', '2025', '2026', '2027', '2028', '2030'],
+                datasets: [{
+                    label: '800V Platform Adoption (%)',
+                    data: [5, 8, 15, 28, 38, 45, 58],
+                    borderColor: accentOrange,
+                    backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: '800V EV Architecture Adoption Curve', font: { size: 14, weight: '700' } }
+                },
+                scales: {
+                    y: { min: 0, max: 70 }
+                }
+            }
+        });
+
+        // Financial Chart
+        new Chart(document.getElementById('financialChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2024', '2025', '2026', '2027'],
+                datasets: [{
+                    label: 'Revenue (€M)',
+                    data: [1240, 1520, 1840, 2180],
+                    backgroundColor: infRed,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Gross Margin (%)',
+                    data: [32.0, 36.5, 38.8, 40.2],
+                    type: 'line',
+                    borderColor: accentGreen,
+                    borderWidth: 3,
+                    yAxisID: 'y1',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: '3-Year Financial Performance', font: { size: 16, weight: '700' } }
+                },
+                scales: {
+                    y: { position: 'left', title: { display: true, text: 'Revenue (€M)' } },
+                    y1: { position: 'right', min: 0, max: 50, grid: { drawOnChartArea: false }, title: { display: true, text: 'Gross Margin (%)' } }
+                }
+            }
+        });
+
+        // Bridge Chart
+        new Chart(document.getElementById('bridgeChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2024', 'Volume', 'ASP', 'Mix', '2027'],
+                datasets: [{
+                    label: 'Revenue (€M)',
+                    data: [1240, 459, 346, 135, 2180],
+                    backgroundColor: [infDark, accentGreen, accentBlue, accentOrange, infRed]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Revenue Growth Bridge', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+
+        // Value Pricing Chart
+        new Chart(document.getElementById('valuePricingChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Total Value', 'Current Price', 'Target Price', 'Customer Keeps'],
+                datasets: [{
+                    label: 'Value (€)',
+                    data: [2444, 143, 611, 1833],
+                    backgroundColor: [accentOrange, '#9e9e9e', infRed, accentGreen]
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Value-Based Pricing Framework (€)', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+
+        // Competitive Pricing Chart
+        new Chart(document.getElementById('competitivePricingChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Infineon Current', 'ST SiC', 'ON EliteSiC', 'Infineon Target', 'TI Si IGBT'],
+                datasets: [{
+                    label: 'ASP (€)',
+                    data: [285, 265, 248, 325, 142],
+                    backgroundColor: ['#9e9e9e', '#757575', '#757575', infRed, '#424242']
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Competitive Pricing Position (1200V Module)', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+
+        // Pipeline Chart
+        new Chart(document.getElementById('pipelineChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Qualified Leads', 'Active Engagement', 'Proposal Stage', 'Negotiation', 'Won'],
+                datasets: [{
+                    data: [28, 18, 12, 8, 15],
+                    backgroundColor: ['#9e9e9e', accentBlue, accentOrange, '#ff6f00', accentGreen]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Design Win Pipeline (Opportunities)', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+
+        // Channel Chart
+        new Chart(document.getElementById('channelChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Direct OEM', 'Tier-1 Partners', 'Distribution', 'Digital'],
+                datasets: [{
+                    data: [68, 20, 9, 3],
+                    backgroundColor: [infRed, accentBlue, accentGreen, accentOrange]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Revenue by Channel (%)', font: { size: 14, weight: '700' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

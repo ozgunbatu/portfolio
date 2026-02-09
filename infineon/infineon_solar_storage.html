@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infineon Solar & Energy Storage GTM Strategy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --infineon-red: #e30613;
+            --infineon-dark: #1a1a1a;
+            --solar-yellow: #ffc107;
+            --energy-blue: #0066cc;
+            --green: #00a651;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            color: var(--infineon-dark);
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        header {
+            background: linear-gradient(135deg, var(--infineon-red) 0%, #b30510 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(227, 6, 19, 0.3);
+        }
+        
+        .header-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .header-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .header-metric {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .header-metric-value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+        
+        .header-metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--infineon-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--infineon-red);
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--infineon-red);
+            transition: transform 0.3s;
+        }
+        
+        .kpi-card:hover { transform: scale(1.05); }
+        
+        .kpi-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--infineon-red);
+        }
+        
+        .kpi-label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-change {
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        
+        .kpi-change.positive { color: var(--green); }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 25px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, var(--infineon-dark) 0%, #4a4a4a 100%);
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tbody tr:hover { background: #f5f5f5; }
+        
+        .insight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid var(--solar-yellow);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .insight-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left-color: var(--green);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover {
+            border-color: var(--infineon-red);
+            color: var(--infineon-red);
+        }
+        
+        .tab-btn.active {
+            background: var(--infineon-red);
+            color: white;
+            border-color: var(--infineon-red);
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            color: #666;
+        }
+        
+        @media (max-width: 1024px) {
+            .header-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-grid">
+                <div>
+                    <h1>☀️ Solar & Energy Storage Ecosystem</h1>
+                    <p class="subtitle">Go-to-Market Strategy & Partner Ecosystem Analysis</p>
+                    <p class="subtitle" style="opacity: 0.8; margin-top: 5px; font-size: 0.95em;">Infineon Power Semiconductors | Renewable Energy Solutions</p>
+                </div>
+                <div class="header-metrics">
+                    <div class="header-metric">
+                        <div class="header-metric-value">$45B</div>
+                        <div class="header-metric-label">Solar Inverter Market 2030</div>
+                    </div>
+                    <div class="header-metric">
+                        <div class="header-metric-value">€850M</div>
+                        <div class="header-metric-label">Infineon Revenue Target 2027</div>
+                    </div>
+                    <div class="header-metric">
+                        <div class="header-metric-value">32%</div>
+                        <div class="header-metric-label">Gross Margin Target</div>
+                    </div>
+                    <div class="header-metric">
+                        <div class="header-metric-value">150+</div>
+                        <div class="header-metric-label">Ecosystem Partners</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('overview')">Market Overview</button>
+            <button class="tab-btn" onclick="showTab('partners')">Partner Scorecard</button>
+            <button class="tab-btn" onclick="showTab('gtm')">GTM Strategy</button>
+            <button class="tab-btn" onclick="showTab('budget')">Budget & ROI</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="card">
+                <h2 class="card-title">📊 Market Landscape</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Solar Inverter Market</div>
+                        <div class="kpi-value">$17.2B</div>
+                        <div class="kpi-change positive">↑ 12.4% CAGR to 2030 ($45B)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Energy Storage Market</div>
+                        <div class="kpi-value">$28.5B</div>
+                        <div class="kpi-change positive">↑ 18.2% CAGR to 2030 ($86B)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Infineon Solar Revenue</div>
+                        <div class="kpi-value">€520M</div>
+                        <div class="kpi-change positive">2024 baseline (target: €850M by 2027)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Market Share</div>
+                        <div class="kpi-value">18%</div>
+                        <div class="kpi-change positive">#1 in IGBT modules for solar</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+
+                <div class="insight">
+                    <strong>⚡ Market Opportunity:</strong> The transition to renewable energy creates a $131B combined market for solar inverters and energy storage by 2030. Infineon's power semiconductors (IGBT, SiC, MOSFET) are critical enablers for grid-tied inverters, microinverters, and battery management systems. Key growth drivers: residential solar adoption (+15% annually), utility-scale storage deployments, and EV-to-grid (V2G) integration.
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Infineon Technology</th>
+                            <th>Market Size 2025</th>
+                            <th>Growth Rate</th>
+                            <th>Revenue Potential</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>String Inverters</strong></td>
+                            <td>IGBT4 modules, CoolSiC™ MOSFET</td>
+                            <td>$8.2B</td>
+                            <td style="color: var(--green);">+11% CAGR</td>
+                            <td>€280M (2027 target)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Central Inverters (Utility)</strong></td>
+                            <td>HiPak modules, PrimePACK™</td>
+                            <td>$4.8B</td>
+                            <td style="color: var(--green);">+9% CAGR</td>
+                            <td>€195M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Microinverters</strong></td>
+                            <td>OptiMOS™, CoolMOS™</td>
+                            <td>$2.1B</td>
+                            <td style="color: var(--green);">+14% CAGR</td>
+                            <td>€120M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Battery Storage (BMS)</strong></td>
+                            <td>TLE98xx, AURIX™ MCU</td>
+                            <td>$18.4B</td>
+                            <td style="color: var(--green);">+18% CAGR</td>
+                            <td>€180M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EV Charging Integration</strong></td>
+                            <td>CoolSiC™ 1200V, OptiMOS™</td>
+                            <td>$3.2B</td>
+                            <td style="color: var(--green);">+22% CAGR</td>
+                            <td>€75M</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td colspan="4"><strong>TOTAL ADDRESSABLE MARKET</strong></td>
+                            <td style="font-weight: 700; color: var(--infineon-red);">€850M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">🌍 Regional Analysis</h2>
+                <div class="chart-container">
+                    <canvas id="regionalChart"></canvas>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Market Drivers</th>
+                            <th>2025 Revenue</th>
+                            <th>2027 Target</th>
+                            <th>Key Partners</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>EMEA</strong></td>
+                            <td>EU Green Deal, Germany/Spain solar boom</td>
+                            <td>€210M</td>
+                            <td>€340M</td>
+                            <td>SMA Solar, Fronius, Huawei</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Americas</strong></td>
+                            <td>IRA subsidies, California mandates</td>
+                            <td>€140M</td>
+                            <td>€240M</td>
+                            <td>Enphase, SolarEdge, Tesla Energy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Greater China</strong></td>
+                            <td>Mega solar parks, Dual Carbon goals</td>
+                            <td>€120M</td>
+                            <td>€190M</td>
+                            <td>Sungrow, Growatt, GoodWe</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Asia Pacific</strong></td>
+                            <td>India solar, Australia residential</td>
+                            <td>€50M</td>
+                            <td>€80M</td>
+                            <td>ABB, Delta, Tata Power Solar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="partners" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">🤝 Partner Ecosystem Scorecard</h2>
+                <div class="insight-success">
+                    <strong>Partnership Strategy:</strong> Infineon partners with 150+ inverter OEMs, system integrators, and EPCs. Tiered approach: Tier-1 Strategic (15 partners, 65% revenue), Tier-2 Preferred (35 partners, 25% revenue), Tier-3 Transactional (100+ partners, 10% revenue).
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0; color: var(--infineon-dark);">Tier-1 Strategic Partners</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Region</th>
+                            <th>2024 Revenue</th>
+                            <th>Products</th>
+                            <th>Partnership Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>SMA Solar Technology</strong></td>
+                            <td>EMEA</td>
+                            <td>€85M</td>
+                            <td>String inverters, Tripower core modules</td>
+                            <td style="color: var(--green); font-weight: 700;">⭐⭐⭐⭐⭐ (95/100)</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>Huawei Solar</strong></td>
+                            <td>Global</td>
+                            <td>€72M</td>
+                            <td>String inverters, SUN2000 series</td>
+                            <td style="color: var(--green); font-weight: 700;">⭐⭐⭐⭐⭐ (92/100)</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>Enphase Energy</strong></td>
+                            <td>Americas</td>
+                            <td>€58M</td>
+                            <td>Microinverters, IQ8 series</td>
+                            <td style="color: var(--green); font-weight: 700;">⭐⭐⭐⭐⭐ (90/100)</td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td><strong>Sungrow</strong></td>
+                            <td>China/Global</td>
+                            <td>€48M</td>
+                            <td>Central inverters, energy storage</td>
+                            <td style="color: #ff9800; font-weight: 700;">⭐⭐⭐⭐ (82/100)</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>SolarEdge</strong></td>
+                            <td>Global</td>
+                            <td>€42M</td>
+                            <td>Optimizers, HD-Wave inverters</td>
+                            <td style="color: var(--green); font-weight: 700;">⭐⭐⭐⭐⭐ (88/100)</td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td><strong>Fronius International</strong></td>
+                            <td>EMEA</td>
+                            <td>€38M</td>
+                            <td>SnapINverter, hybrid systems</td>
+                            <td style="color: #ff9800; font-weight: 700;">⭐⭐⭐⭐ (85/100)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin: 30px 0 20px 0; color: var(--infineon-dark);">Partnership Scorecard Methodology</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Revenue Contribution (30%)</div>
+                        <div class="kpi-value">30</div>
+                        <div class="kpi-change">Annual revenue + growth trajectory</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Strategic Alignment (25%)</div>
+                        <div class="kpi-value">25</div>
+                        <div class="kpi-change">Tech roadmap sync, co-development</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Market Reach (20%)</div>
+                        <div class="kpi-value">20</div>
+                        <div class="kpi-change">Geographic coverage, customer base</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Operational Excellence (15%)</div>
+                        <div class="kpi-value">15</div>
+                        <div class="kpi-change">Payment terms, forecast accuracy</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Innovation Potential (10%)</div>
+                        <div class="kpi-value">10</div>
+                        <div class="kpi-change">R&D collaboration, IP creation</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="partnerChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="gtm" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">🚀 Go-to-Market Strategy</h2>
+                
+                <div class="insight">
+                    <strong>GTM Approach:</strong> Three-pillar strategy - (1) Deepen strategic partnerships with top 15 OEMs, (2) Geographic expansion in high-growth markets (India, Australia, Middle East), (3) Adjacent market penetration (EV charging, microgrid, V2G).
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0; color: var(--infineon-dark);">2025-2027 GTM Roadmap</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Initiative</th>
+                            <th>Target Market</th>
+                            <th>Investment</th>
+                            <th>Expected Revenue</th>
+                            <th>Timeline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>Tier-1 Partner Program</strong></td>
+                            <td>Global (15 partners)</td>
+                            <td>€8.5M</td>
+                            <td>€220M incremental</td>
+                            <td>Q1 2025 - Q4 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>India Market Entry</strong></td>
+                            <td>India residential/commercial solar</td>
+                            <td>€4.2M</td>
+                            <td>€45M (by 2027)</td>
+                            <td>Q2 2025 - Q4 2027</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EV-Solar Integration</strong></td>
+                            <td>V2G, smart home ecosystems</td>
+                            <td>€6.8M</td>
+                            <td>€75M</td>
+                            <td>Q3 2025 - 2027</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>Energy Storage Expansion</strong></td>
+                            <td>Battery BMS, hybrid systems</td>
+                            <td>€5.5M</td>
+                            <td>€90M</td>
+                            <td>Ongoing 2025-2027</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marketing & Demand Gen</strong></td>
+                            <td>Global awareness, lead gen</td>
+                            <td>€3.2M</td>
+                            <td>Pipeline support</td>
+                            <td>2025-2027</td>
+                        </tr>
+                        <tr style="background: #fff3e0;">
+                            <td colspan="2"><strong>TOTAL GTM INVESTMENT</strong></td>
+                            <td style="font-weight: 700;">€28.2M</td>
+                            <td style="font-weight: 700; color: var(--infineon-red);">€430M</td>
+                            <td><strong>3-Year Horizon</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="chart-container">
+                    <canvas id="gtmChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="budget" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">💰 Budget Model & ROI Analysis</h2>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">3-Year GTM Investment</div>
+                        <div class="kpi-value">€28.2M</div>
+                        <div class="kpi-change">Budget allocation across initiatives</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Incremental Revenue</div>
+                        <div class="kpi-value">€430M</div>
+                        <div class="kpi-change positive">2025-2027 cumulative</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Gross Margin</div>
+                        <div class="kpi-value">32%</div>
+                        <div class="kpi-change positive">€138M gross profit contribution</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">ROI</div>
+                        <div class="kpi-value">389%</div>
+                        <div class="kpi-change positive">Payback: 8.3 months</div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0; color: var(--infineon-dark);">Budget Allocation by Initiative</h3>
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>GTM Investment</th>
+                            <th>Revenue</th>
+                            <th>Gross Profit</th>
+                            <th>Cumulative ROI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>2025</strong></td>
+                            <td>€9.8M</td>
+                            <td>€590M</td>
+                            <td>€189M</td>
+                            <td style="color: var(--green);">1.8x</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2026</strong></td>
+                            <td>€10.2M</td>
+                            <td>€720M</td>
+                            <td>€230M</td>
+                            <td style="color: var(--green);">2.7x</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2027</strong></td>
+                            <td>€8.2M</td>
+                            <td>€850M</td>
+                            <td>€272M</td>
+                            <td style="color: var(--green);">3.9x</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>€28.2M</strong></td>
+                            <td><strong>€2,160M</strong></td>
+                            <td><strong>€691M</strong></td>
+                            <td style="font-weight: 700; color: var(--infineon-red);"><strong>24.5x</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="insight-success">
+                    <strong>💎 Value Creation:</strong> €28.2M GTM investment delivers €691M gross profit over 3 years (24.5x return). Key success drivers: strategic partnership deepening (+€220M), India market entry (+€45M), and EV-solar convergence (+€75M). Gross margin expansion from 30% to 32% driven by SiC content increase and premium product mix.
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p style="font-weight: 700; color: var(--infineon-red); font-size: 1.2em;">INFINEON TECHNOLOGIES</p>
+            <p style="margin-top: 10px;">Solar & Energy Storage Ecosystem | Go-to-Market Strategy</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Business Development Case Study | February 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        const infRed = '#e30613';
+        const solarYellow = '#ffc107';
+        const energyBlue = '#0066cc';
+        const green = '#00a651';
+
+        new Chart(document.getElementById('marketChart'), {
+            type: 'line',
+            data: {
+                labels: ['2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+                datasets: [{
+                    label: 'Solar Inverter Market ($B)',
+                    data: [17.2, 19.8, 23.1, 26.8, 31.2, 36.5, 45.0],
+                    borderColor: solarYellow,
+                    borderWidth: 3
+                }, {
+                    label: 'Energy Storage Market ($B)',
+                    data: [28.5, 35.2, 43.8, 53.4, 64.2, 74.8, 86.0],
+                    borderColor: energyBlue,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { title: { display: true, text: 'Market Growth Projection', font: { size: 16 } } }
+            }
+        });
+
+        new Chart(document.getElementById('regionalChart'), {
+            type: 'bar',
+            data: {
+                labels: ['EMEA', 'Americas', 'Greater China', 'Asia Pacific'],
+                datasets: [{
+                    label: '2025 Revenue (€M)',
+                    data: [210, 140, 120, 50],
+                    backgroundColor: infRed
+                }, {
+                    label: '2027 Target (€M)',
+                    data: [340, 240, 190, 80],
+                    backgroundColor: green
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { title: { display: true, text: 'Regional Revenue Distribution', font: { size: 16 } } }
+            }
+        });
+
+        new Chart(document.getElementById('partnerChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Revenue', 'Strategic Alignment', 'Market Reach', 'Operations', 'Innovation'],
+                datasets: [{
+                    label: 'SMA Solar',
+                    data: [28, 24, 19, 14, 10],
+                    borderColor: infRed,
+                    backgroundColor: 'rgba(227, 6, 19, 0.2)'
+                }, {
+                    label: 'Enphase',
+                    data: [25, 23, 18, 14, 8],
+                    borderColor: energyBlue,
+                    backgroundColor: 'rgba(0, 102, 204, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { title: { display: true, text: 'Partner Scorecard Comparison', font: { size: 16 } } },
+                scales: { r: { min: 0, max: 30 } }
+            }
+        });
+
+        new Chart(document.getElementById('gtmChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Tier-1 Partners', 'India Entry', 'EV-Solar', 'Energy Storage', 'Marketing'],
+                datasets: [{
+                    label: 'Expected Revenue (€M)',
+                    data: [220, 45, 75, 90, 0],
+                    backgroundColor: [infRed, solarYellow, energyBlue, green, '#9e9e9e']
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { title: { display: true, text: 'GTM Initiatives - Revenue Impact', font: { size: 16 } } }
+            }
+        });
+
+        new Chart(document.getElementById('budgetChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Tier-1 Partners', 'India Entry', 'EV-Solar', 'Energy Storage', 'Marketing'],
+                datasets: [{
+                    data: [8.5, 4.2, 6.8, 5.5, 3.2],
+                    backgroundColor: [infRed, solarYellow, energyBlue, green, '#ff9800']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { title: { display: true, text: 'Budget Allocation (€28.2M Total)', font: { size: 16 } } }
+            }
+        });
+    </script>
+</body>
+</html>

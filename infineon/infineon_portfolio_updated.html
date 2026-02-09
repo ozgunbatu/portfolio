@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infineon Business Strategy Portfolio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+        
+        header {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #e30613 0%, #b30510 100%);
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 60px rgba(227, 6, 19, 0.4);
+        }
+        
+        .logo {
+            font-size: 3.5em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #e30613;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .case-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .case-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(227, 6, 19, 0.25);
+        }
+        
+        .case-header {
+            background: linear-gradient(135deg, #e30613 0%, #b30510 100%);
+            padding: 25px;
+            color: white;
+            text-align: center;
+        }
+        
+        .case-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+        
+        .case-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .case-subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .case-body {
+            padding: 25px;
+            color: #1a1a1a;
+        }
+        
+        .case-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #e30613;
+        }
+        
+        .metric-label {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .case-description {
+            color: #4a4a4a;
+            margin-bottom: 18px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        .view-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #e30613 0%, #b30510 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(227, 6, 19, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+        }
+        
+        .footer-logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #e30613;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5em; }
+            h1 { font-size: 1.8em; }
+            .case-grid { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">INFINEON</div>
+            <h1>Business Strategy Portfolio</h1>
+            <p class="subtitle">6 Product Management & Market Strategy Cases</p>
+            <p class="subtitle" style="opacity: 0.8; margin-top: 10px;">Automotive | Renewable Energy | Industrial | IoT | RF Solutions</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">€5.37B</div>
+                <div class="stat-label">Total Revenue Target 2027</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Business Units Analyzed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">Interactive Charts</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Data Sources Documented</div>
+            </div>
+        </div>
+
+        <div class="case-grid">
+            <!-- PMIC -->
+            <div class="case-card">
+                <div class="case-header">
+                    <div class="case-icon">🔋</div>
+                    <div class="case-title">PMIC Strategy</div>
+                    <div class="case-subtitle">800V Automotive Power ICs</div>
+                </div>
+                <div class="case-body">
+                    <p class="case-description">Value-based pricing for 800V EV power management. Market analysis, competitive positioning, 3-year financial projections.</p>
+                    <div class="case-metrics">
+                        <div class="metric">
+                            <div class="metric-value">€2.18B</div>
+                            <div class="metric-label">2027 Revenue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">+76%</div>
+                            <div class="metric-label">3Y Growth</div>
+                        </div>
+                    </div>
+                    <a href="infineon_pmic_advanced.html" class="view-btn">View Analysis →</a>
+                </div>
+            </div>
+
+            <!-- Solar -->
+            <div class="case-card">
+                <div class="case-header">
+                    <div class="case-icon">☀️</div>
+                    <div class="case-title">Solar & Energy Storage</div>
+                    <div class="case-subtitle">Ecosystem GTM Strategy</div>
+                </div>
+                <div class="case-body">
+                    <p class="case-description">Partner scorecard, regional expansion, GTM budget allocation with 24.5x ROI for inverter & storage markets.</p>
+                    <div class="case-metrics">
+                        <div class="metric">
+                            <div class="metric-value">€850M</div>
+                            <div class="metric-label">2027 Target</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">24.5x</div>
+                            <div class="metric-label">GTM ROI</div>
+                        </div>
+                    </div>
+                    <a href="infineon_solar_storage.html" class="view-btn">View Analysis →</a>
+                </div>
+            </div>
+
+            <!-- EV Charging -->
+            <div class="case-card">
+                <div class="case-header">
+                    <div class="case-icon">⚡</div>
+                    <div class="case-title">EV Charging</div>
+                    <div class="case-subtitle">Infrastructure Network Strategy</div>
+                </div>
+                <div class="case-body">
+                    <p class="case-description">DC fast charging market entry. Geographic expansion roadmap targeting 420K chargers enabled by 2027.</p>
+                    <div class="case-metrics">
+                        <div class="metric">
+                            <div class="metric-value">€680M</div>
+                            <div class="metric-label">Revenue 2027</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">420K</div>
+                            <div class="metric-label">Chargers</div>
+                        </div>
+                    </div>
+                    <a href="infineon_ev_charging.html" class="view-btn">View Analysis →</a>
+                </div>
+            </div>
+
+            <!-- 5G RF -->
+            <div class="case-card">
+                <div class="case-header">
+                    <div class="case-icon">📡</div>
+                    <div class="case-title">5G RF Components</div>
+                    <div class="case-subtitle">Market Entry Strategy</div>
+                </div>
+                <div class="case-body">
+                    <p class="case-description">GaN-based RF power amplifiers for 5G infrastructure. Competitive analysis and path to #2 market position.</p>
+                    <div class="case-metrics">
+                        <div class="metric">
+                            <div class="metric-value">€520M</div>
+                            <div class="metric-label">2027 Revenue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">12%</div>
+                            <div class="metric-label">Share Target</div>
+                        </div>
+                    </div>
+                    <a href="infineon_5g_rf.html" class="view-btn">View Analysis →</a>
+                </div>
+            </div>
+
+            <!-- Industrial Motor -->
+            <div class="case-card">
+                <div class="case-header">
+                    <div class="case-icon">⚙️</div>
+                    <div class="case-title">Industrial Motor Control</div>
+                    <div class="case-subtitle">IGBT Product Roadmap</div>
+                </div>
+                <div class="case-body">
+                    <p class="case-description">Product portfolio strategy for industrial VFDs. IGBT4 technology roadmap, competitive positioning, design win targets.</p>
+                    <div class="case-metrics">
+                        <div class="metric">
+                            <div class="metric-value">€740M</div>
+                            <div class="metric-label">2027 Revenue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">22%</div>
+                            <div class="metric-label">Share Target</div>
+                        </div>
+                    </div>
+                    <a href="infineon_industrial_motor.html" class="view-btn">View Analysis →</a>
+                </div>
+            </div>
+
+            <!-- Smart Home IoT -->
+            <div class="case-card">
+                <div class="case-header">
+                    <div class="case-icon">🏠</div>
+                    <div class="case-title">Smart Home & IoT</div>
+                    <div class="case-subtitle">XENSIV Sensor Platform</div>
+                </div>
+                <div class="case-body">
+                    <p class="case-description">Product strategy for XENSIV sensors and OPTIGA security. Matter ecosystem partnerships, design win pipeline.</p>
+                    <div class="case-metrics">
+                        <div class="metric">
+                            <div class="metric-value">€620M</div>
+                            <div class="metric-label">2027 Revenue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">85</div>
+                            <div class="metric-label">Design Wins</div>
+                        </div>
+                    </div>
+                    <a href="infineon_smart_home_iot.html" class="view-btn">View Analysis →</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-logo">INFINEON TECHNOLOGIES</div>
+            <p>Business Strategy Portfolio | Product Management & Market Analysis</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">Ozgun Batuhan Dogan | Business Development & Strategic Planning</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.7;">February 2025</p>
+        </footer>
+    </div>
+</body>
+</html>
